@@ -1,10 +1,11 @@
 "use client";
 
 import { createClient } from "@/lib/supabase-browser";
+import { autoCategorize } from "@/lib/auto-categorization";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, TrendingUp, TrendingDown } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, TrendingUp, TrendingDown, Wand2 } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -45,6 +46,27 @@ export default function TransactionsPage() {
   const [accountId, setAccountId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [saving, setSaving] = useState(false);
+  const [autoCatSuggestion, setAutoCatSuggestion] = useState<string | null>(null);
+
+  // Auto-categorização quando digita descrição
+  useEffect(() => {
+    if (!description || categories.length === 0) {
+      setAutoCatSuggestion(null);
+      return;
+    }
+    const categoryMap = new Map<string, string>();
+    categories.forEach(c => categoryMap.set(c.name, c.id));
+    const result = autoCategorize(description, categoryMap);
+    if (result) {
+      setAutoCatSuggestion(result.categoryName);
+      // Se categoria ainda não foi selecionada manualmente, auto-seleciona
+      if (!categoryId) {
+        setCategoryId(result.categoryId);
+      }
+    } else {
+      setAutoCatSuggestion(null);
+    }
+  }, [description, categories]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -93,12 +115,23 @@ export default function TransactionsPage() {
     setSaving(true);
     const supabase = createClient();
 
+    // Auto-categorizar se não selecionou categoria
+    let finalCategoryId = categoryId;
+    if (!finalCategoryId && categories.length > 0) {
+      const categoryMap = new Map<string, string>();
+      categories.forEach(c => categoryMap.set(c.name, c.id));
+      const result = autoCategorize(description, categoryMap);
+      if (result) {
+        finalCategoryId = result.categoryId;
+      }
+    }
+
     const { error } = await supabase.from("transactions").insert({
       user_id: user.id,
       description,
       amount: parseFloat(amount),
       type,
-      category_id: categoryId || null,
+      category_id: finalCategoryId || null,
       account_id: accountId || null,
       date,
     });
@@ -171,7 +204,14 @@ export default function TransactionsPage() {
                   onChange={(e) => setDescription(e.target.value)}
                   className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                   required
+                  placeholder="Ex: IFOOD, Netflix, Combustível..."
                 />
+                {autoCatSuggestion && (
+                  <p className="mt-1 flex items-center gap-1 text-xs text-blue-600">
+                    <Wand2 className="h-3 w-3" />
+                    Categoria sugerida: <span className="font-medium">{autoCatSuggestion}</span>
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Valor (R$)</label>
