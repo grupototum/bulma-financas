@@ -125,7 +125,7 @@ export const defaultRules: AutoCategorizationRule[] = [
 export function autoCategorize(
   description: string,
   categoryMap: Map<string, string> // nome da categoria -> category_id
-): string | null {
+): { categoryId: string; categoryName: string } | null {
   const upperDesc = description.toUpperCase();
   
   for (const rule of defaultRules) {
@@ -149,7 +149,7 @@ export function autoCategorize(
     
     if (matches) {
       const categoryId = categoryMap.get(rule.categoryName);
-      if (categoryId) return categoryId;
+      if (categoryId) return { categoryId, categoryName: rule.categoryName };
     }
   }
   
