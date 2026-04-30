@@ -24,6 +24,8 @@ import {
   Wallet,
   Calendar,
   CreditCard,
+  Target,
+  PiggyBank,
 } from "lucide-react";
 
 interface Transaction {
@@ -56,6 +58,20 @@ interface MonthlyData {
   expense: number;
 }
 
+interface Goal {
+  id: string;
+  name: string;
+  target_amount: number;
+  current_amount: number;
+  deadline: string | null;
+  color: string;
+}
+
+interface BudgetSummary {
+  planned: number;
+  spent: number;
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -63,6 +79,8 @@ export default function DashboardPage() {
   const [summary, setSummary] = useState({ income: 0, expense: 0, balance: 0 });
   const [categoryData, setCategoryData] = useState<CategorySummary[]>([]);
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [budgetSummary, setBudgetSummary] = useState<BudgetSummary>({ planned: 0, spent: 0 });
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState(() => {
     const now = new Date();
@@ -85,6 +103,16 @@ export default function DashboardPage() {
         .eq("user_id", user.id)
         .eq("is_active", true);
       if (accs) setAccounts(accs);
+
+      // Buscar metas
+      const { data: gs } = await supabase
+        .from("goals")
+        .select("id, name, target_amount, current_amount, deadline, color")
+        .eq("user_id", user.id)
+        .eq("is_active", true)
+        .order("deadline", { ascending: true })
+        .limit(3);
+      if (gs) setGoals(gs);
 
       // Buscar transações dos últimos 12 meses para ter dados suficientes
       const startDate = new Date();
@@ -110,51 +138,77 @@ export default function DashboardPage() {
 
   // Calcular dados do período selecionado
   useEffect(() => {
-    if (transactions.length === 0) return;
+    async function calculate() {
+      if (transactions.length === 0) return;
 
-    const [year, month] = period.split("-").map(Number);
-    const startOfMonth = `${year}-${String(month).padStart(2, "0")}-01`;
-    const endOfMonthDate = new Date(year, month, 0);
-    const endOfMonth = `${year}-${String(month).padStart(2, "0")}-${String(endOfMonthDate.getDate()).padStart(2, "0")}`;
+      const [year, month] = period.split("-").map(Number);
+      const startOfMonth = `${year}-${String(month).padStart(2, "0")}-01`;
+      const endOfMonthDate = new Date(year, month, 0);
+      const endOfMonth = `${year}-${String(month).padStart(2, "0")}-${String(endOfMonthDate.getDate()).padStart(2, "0")}`;
 
-    const monthTxs = transactions.filter((t) => t.date >= startOfMonth && t.date <= endOfMonth);
+      const monthTxs = transactions.filter((t) => t.date >= startOfMonth && t.date <= endOfMonth);
 
-    // Resumo
-    const income = monthTxs.filter((t) => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
-    const expense = monthTxs.filter((t) => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
-    setSummary({ income, expense, balance: income - expense });
+      // Resumo
+      const income = monthTxs.filter((t) => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
+      const expense = monthTxs.filter((t) => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
+      setSummary({ income, expense, balance: income - expense });
 
-    // Pizza
-    const categoryMap = new Map<string, { value: number; color: string }>();
-    monthTxs.filter((t) => t.type === "expense").forEach((t) => {
-      const catName = t.category?.name || "Sem categoria";
-      const catColor = t.category?.color || "#9CA3AF";
-      const existing = categoryMap.get(catName);
-      if (existing) existing.value += t.amount;
-      else categoryMap.set(catName, { value: t.amount, color: catColor });
-    });
-    setCategoryData(
-      Array.from(categoryMap.entries()).map(([name, { value, color }]) => ({ name, value, color }))
-    );
+      // Pizza
+      const categoryMap = new Map<string, { value: number; color: string }>();
+      monthTxs.filter((t) => t.type === "expense").forEach((t) => {
+        const catName = t.category?.name || "Sem categoria";
+        const catColor = t.category?.color || "#9CA3AF";
+        const existing = categoryMap.get(catName);
+        if (existing) existing.value += t.amount;
+        else categoryMap.set(catName, { value: t.amount, color: catColor });
+      });
+      setCategoryData(
+        Array.from(categoryMap.entries()).map(([name, { value, color }]) => ({ name, value, color }))
+      );
 
-    // Evolução mensal (últimos 6 meses incluindo o selecionado)
-    const months: MonthlyData[] = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(year, month - 1 - i, 1);
-      const y = d.getFullYear();
-      const m = d.getMonth() + 1;
-      const label = `${String(m).padStart(2, "0")}/${y}`;
-      const mStart = `${y}-${String(m).padStart(2, "0")}-01`;
-      const mEndDate = new Date(y, m, 0);
-      const mEnd = `${y}-${String(m).padStart(2, "0")}-${String(mEndDate.getDate()).padStart(2, "0")}`;
+      // Budget summary do mês
+      const supabase = createClient();
+      const { data: budget } = await supabase
+        .from("budgets")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("month", month)
+        .eq("year", year)
+        .single();
 
-      const mTxs = transactions.filter((t) => t.date >= mStart && t.date <= mEnd);
-      const mIncome = mTxs.filter((t) => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
-      const mExpense = mTxs.filter((t) => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
-      months.push({ label, income: mIncome, expense: mExpense });
+      if (budget) {
+        const { data: bcs } = await supabase
+          .from("budget_categories")
+          .select("planned_amount")
+          .eq("budget_id", budget.id);
+        const planned = bcs?.reduce((s, bc) => s + (bc.planned_amount || 0), 0) || 0;
+        const spent = monthTxs.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0);
+        setBudgetSummary({ planned, spent });
+      } else {
+        setBudgetSummary({ planned: 0, spent: monthTxs.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0) });
+      }
+
+      // Evolução mensal (últimos 6 meses incluindo o selecionado)
+      const months: MonthlyData[] = [];
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(year, month - 1 - i, 1);
+        const y = d.getFullYear();
+        const m = d.getMonth() + 1;
+        const label = `${String(m).padStart(2, "0")}/${y}`;
+        const mStart = `${y}-${String(m).padStart(2, "0")}-01`;
+        const mEndDate = new Date(y, m, 0);
+        const mEnd = `${y}-${String(m).padStart(2, "0")}-${String(mEndDate.getDate()).padStart(2, "0")}`;
+
+        const mTxs = transactions.filter((t) => t.date >= mStart && t.date <= mEnd);
+        const mIncome = mTxs.filter((t) => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
+        const mExpense = mTxs.filter((t) => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
+        months.push({ label, income: mIncome, expense: mExpense });
+      }
+      setMonthlyData(months);
     }
-    setMonthlyData(months);
-  }, [transactions, period]);
+
+    calculate();
+  }, [transactions, period]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const recentTransactions = useMemo(() => {
     return transactions.slice(0, 5);
@@ -225,6 +279,67 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Metas e Orçamento */}
+        {(goals.length > 0 || budgetSummary.planned > 0) && (
+          <div className="mb-8 grid gap-4 sm:grid-cols-2">
+            {goals.length > 0 && (
+              <div className="rounded-xl bg-white p-6 shadow-sm">
+                <div className="mb-3 flex items-center gap-2">
+                  <Target className="h-5 w-5 text-purple-600" />
+                  <h2 className="text-lg font-semibold text-gray-900">Meta em Andamento</h2>
+                </div>
+                {goals.slice(0, 1).map((g) => {
+                  const pct = g.target_amount > 0 ? Math.min(100, Math.round((g.current_amount / g.target_amount) * 100)) : 0;
+                  return (
+                    <div key={g.id}>
+                      <p className="font-medium text-gray-900">{g.name}</p>
+                      <div className="mt-2 flex justify-between text-sm text-gray-500">
+                        <span>{formatCurrency(g.current_amount)}</span>
+                        <span>{formatCurrency(g.target_amount)}</span>
+                      </div>
+                      <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                        <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: g.color }} />
+                      </div>
+                      <p className="mt-1 text-right text-xs text-gray-500">{pct}% concluído</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {budgetSummary.planned > 0 && (
+              <div className="rounded-xl bg-white p-6 shadow-sm">
+                <div className="mb-3 flex items-center gap-2">
+                  <PiggyBank className="h-5 w-5 text-blue-600" />
+                  <h2 className="text-lg font-semibold text-gray-900">Orçamento do Mês</h2>
+                </div>
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Gasto</span>
+                  <span>Planejado</span>
+                </div>
+                <div className="mt-2 flex justify-between text-lg font-bold">
+                  <span className={budgetSummary.spent > budgetSummary.planned ? "text-red-600" : "text-gray-900"}>
+                    {formatCurrency(budgetSummary.spent)}
+                  </span>
+                  <span className="text-gray-900">{formatCurrency(budgetSummary.planned)}</span>
+                </div>
+                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${Math.min(100, budgetSummary.planned > 0 ? Math.round((budgetSummary.spent / budgetSummary.planned) * 100) : 0)}%`,
+                      backgroundColor: budgetSummary.spent > budgetSummary.planned ? "#EF4444" : "#3B82F6",
+                    }}
+                  />
+                </div>
+                <p className="mt-1 text-right text-xs text-gray-500">
+                  {budgetSummary.planned > 0 ? Math.round((budgetSummary.spent / budgetSummary.planned) * 100) : 0}% utilizado
+                  {budgetSummary.spent > budgetSummary.planned && " (ultrapassado)"}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Gráficos */}
         <div className="mb-8 grid gap-6 lg:grid-cols-2">

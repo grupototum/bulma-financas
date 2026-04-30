@@ -9,6 +9,8 @@ import {
   Tags,
   Landmark,
   BarChart3,
+  Target,
+  Wallet,
   User,
   LogOut,
   Menu,
@@ -21,6 +23,8 @@ const navItems = [
   { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
   { href: "/categories", label: "Categorias", icon: Tags },
   { href: "/contas", label: "Contas", icon: Landmark },
+  { href: "/metas", label: "Metas", icon: Target },
+  { href: "/orcamentos", label: "Orçamentos", icon: Wallet },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
   { href: "/perfil", label: "Perfil", icon: User },
 ];
