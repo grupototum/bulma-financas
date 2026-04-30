@@ -1,11 +1,12 @@
 "use client";
 
 import { createClient } from "@/lib/supabase-browser";
+import { formatCurrency } from "@/lib/format";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { PlusCircle, ArrowLeftRight, TrendingUp, TrendingDown, Wallet } from "lucide-react";
+import { PlusCircle, ArrowLeftRight, TrendingUp, TrendingDown, Wallet, LogOut } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -101,9 +102,14 @@ export default function DashboardPage() {
   }, [router]);
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/");
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error("Erro ao fazer logout:", err);
+    } finally {
+      router.push("/");
+    }
   }
 
   if (loading) {
@@ -132,8 +138,9 @@ export default function DashboardPage() {
             </Link>
             <button
               onClick={handleLogout}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
+              <LogOut className="h-4 w-4" />
               Sair
             </button>
           </div>
@@ -152,7 +159,7 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm text-gray-500">Receitas (mês)</p>
                 <p className="text-2xl font-bold text-green-600">
-                  R$ {summary.income.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  {formatCurrency(summary.income)}
                 </p>
               </div>
             </div>
@@ -166,7 +173,7 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm text-gray-500">Despesas (mês)</p>
                 <p className="text-2xl font-bold text-red-600">
-                  R$ {summary.expense.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  {formatCurrency(summary.expense)}
                 </p>
               </div>
             </div>
@@ -184,7 +191,7 @@ export default function DashboardPage() {
                     summary.balance >= 0 ? "text-blue-600" : "text-red-600"
                   }`}
                 >
-                  R$ {summary.balance.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  {formatCurrency(summary.balance)}
                 </p>
               </div>
             </div>
@@ -214,11 +221,7 @@ export default function DashboardPage() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    formatter={(value: number) =>
-                      `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
-                    }
-                  />
+                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
@@ -235,12 +238,7 @@ export default function DashboardPage() {
                     style={{ backgroundColor: cat.color }}
                   />
                   <span className="text-sm text-gray-600">
-                    {cat.name} ({" "}
-                    {cat.value.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                    )
+                    {cat.name} ({formatCurrency(cat.value)})
                   </span>
                 </div>
               ))}
@@ -297,10 +295,8 @@ export default function DashboardPage() {
                         t.type === "income" ? "text-green-600" : "text-red-600"
                       }`}
                     >
-                      {t.type === "income" ? "+" : "-"}R${" "}
-                      {t.amount.toLocaleString("pt-BR", {
-                        minimumFractionDigits: 2,
-                      })}
+                      {t.type === "income" ? "+" : "-"}
+                      {formatCurrency(t.amount)}
                     </p>
                   </div>
                 ))

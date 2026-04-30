@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
+import { loginSchema } from "@/lib/schemas";
 import { useRouter } from "next/navigation";
 
 export function LoginForm() {
@@ -10,42 +11,57 @@ export function LoginForm() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setMessage("");
+    setFieldErrors({});
 
-    const supabase = createClient();
-
-    if (isSignUp) {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: "" },
-        },
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string;
+        errors[field] = issue.message;
       });
-      if (error) {
-        setMessage(error.message);
-      } else {
-        setMessage("Verifique seu email para confirmar o cadastro!");
-      }
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        setMessage(error.message);
-      } else {
-        router.push("/dashboard");
-        router.refresh();
-      }
+      setFieldErrors(errors);
+      return;
     }
 
-    setLoading(false);
+    setLoading(true);
+
+    try {
+      const supabase = createClient();
+
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (error) {
+          setMessage(error.message);
+        } else {
+          setMessage("Verifique seu email para confirmar o cadastro!");
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) {
+          setMessage(error.message);
+        } else {
+          router.push("/dashboard");
+          router.refresh();
+        }
+      }
+    } catch (err: any) {
+      setMessage(err?.message || "Ocorreu um erro inesperado.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,8 +83,10 @@ export function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-            required
           />
+          {fieldErrors.email && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+          )}
         </div>
 
         <div>
@@ -80,9 +98,10 @@ export function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-            required
-            minLength={6}
           />
+          {fieldErrors.password && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
+          )}
         </div>
 
         {message && (
@@ -111,6 +130,7 @@ export function LoginForm() {
           onClick={() => {
             setIsSignUp(!isSignUp);
             setMessage("");
+            setFieldErrors({});
           }}
           className="text-sm text-blue-600 hover:underline"
         >
