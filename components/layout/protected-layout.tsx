@@ -7,6 +7,8 @@ import {
   LayoutDashboard,
   ArrowLeftRight,
   Tags,
+  Landmark,
+  BarChart3,
   User,
   LogOut,
   Menu,
@@ -18,6 +20,8 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
   { href: "/categories", label: "Categorias", icon: Tags },
+  { href: "/contas", label: "Contas", icon: Landmark },
+  { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
   { href: "/perfil", label: "Perfil", icon: User },
 ];
 
@@ -153,6 +157,11 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
         )}
 
         <main className="flex-1 overflow-auto">{children}</main>
+
+        {/* Footer */}
+        <footer className="border-t border-gray-200 bg-white py-4 text-center text-xs text-gray-400">
+          Bulma Finanças v2 • Desenvolvido por Rael
+        </footer>
       </div>
     </div>
   );
