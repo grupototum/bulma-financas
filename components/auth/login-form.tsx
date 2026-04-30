@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { loginSchema } from "@/lib/schemas";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -124,6 +125,17 @@ export function LoginForm() {
           {loading ? "Carregando..." : isSignUp ? "Cadastrar" : "Entrar"}
         </button>
       </form>
+
+      {!isSignUp && (
+        <div className="text-center">
+          <Link
+            href="/recuperar-senha"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Esqueci minha senha
+          </Link>
+        </div>
+      )}
 
       <div className="text-center">
         <button
