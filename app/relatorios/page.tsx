@@ -157,12 +157,12 @@ export default function RelatoriosPage() {
                 type="month"
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
-                className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
               />
             </div>
             <button
               onClick={exportCSV}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
             >
               <Download className="h-4 w-4" />
               Exportar CSV
@@ -172,15 +172,15 @@ export default function RelatoriosPage() {
 
         {/* Resumo */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Receitas</p>
             <p className="text-xl font-bold text-green-600">{formatCurrency(totalIncome)}</p>
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Despesas</p>
             <p className="text-xl font-bold text-red-600">{formatCurrency(totalExpense)}</p>
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
             <p className={`text-xl font-bold ${totalIncome - totalExpense >= 0 ? "text-blue-600" : "text-red-600"}`}>
               {formatCurrency(totalIncome - totalExpense)}
@@ -195,7 +195,7 @@ export default function RelatoriosPage() {
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "categorias"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
             }`}
           >
             <Tag className="h-4 w-4" />
@@ -206,7 +206,7 @@ export default function RelatoriosPage() {
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "contas"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
             }`}
           >
             <CreditCard className="h-4 w-4" />
@@ -216,14 +216,14 @@ export default function RelatoriosPage() {
 
         {/* Conteúdo */}
         {activeTab === "categorias" ? (
-          <div className="rounded-xl bg-white shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
             {categoryReport.length === 0 ? (
-              <div className="p-8 text-center text-gray-400">
-                <Tag className="mx-auto mb-3 h-10 w-10 text-gray-300" />
+              <div className="p-8 text-center text-gray-400 dark:text-gray-500">
+                <Tag className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
                 <p>Nenhuma despesa no período selecionado</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {categoryReport.map((cat) => (
                   <div key={cat.name} className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3">
@@ -240,14 +240,14 @@ export default function RelatoriosPage() {
             )}
           </div>
         ) : (
-          <div className="rounded-xl bg-white shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
             {accountReport.length === 0 ? (
-              <div className="p-8 text-center text-gray-400">
-                <CreditCard className="mx-auto mb-3 h-10 w-10 text-gray-300" />
+              <div className="p-8 text-center text-gray-400 dark:text-gray-500">
+                <CreditCard className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
                 <p>Nenhuma transação no período selecionado</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {accountReport.map((acc) => (
                   <div key={acc.name} className="flex items-center justify-between p-4">
                     <div>

@@ -234,16 +234,16 @@ export default function DashboardPage() {
               type="month"
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Cards de Resumo */}
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-green-100 p-2">
+              <div className="rounded-lg bg-green-100 dark:bg-green-900/30 p-2">
                 <TrendingUp className="h-5 w-5 text-green-600" />
               </div>
               <div>
@@ -253,9 +253,9 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-red-100 p-2">
+              <div className="rounded-lg bg-red-100 dark:bg-red-900/30 p-2">
                 <TrendingDown className="h-5 w-5 text-red-600" />
               </div>
               <div>
@@ -265,9 +265,9 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-blue-100 p-2">
+              <div className="rounded-lg bg-blue-100 dark:bg-blue-900/30 p-2">
                 <Wallet className="h-5 w-5 text-blue-600" />
               </div>
               <div>
@@ -284,7 +284,7 @@ export default function DashboardPage() {
         {(goals.length > 0 || budgetSummary.planned > 0) && (
           <div className="mb-8 grid gap-4 sm:grid-cols-2">
             {goals.length > 0 && (
-              <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+              <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Target className="h-5 w-5 text-purple-600" />
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Meta em Andamento</h2>
@@ -298,7 +298,7 @@ export default function DashboardPage() {
                         <span>{formatCurrency(g.current_amount)}</span>
                         <span>{formatCurrency(g.target_amount)}</span>
                       </div>
-                      <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                      <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                         <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: g.color }} />
                       </div>
                       <p className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400">{pct}% concluído</p>
@@ -308,7 +308,7 @@ export default function DashboardPage() {
               </div>
             )}
             {budgetSummary.planned > 0 && (
-              <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+              <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
                 <div className="mb-3 flex items-center gap-2">
                   <PiggyBank className="h-5 w-5 text-blue-600" />
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Orçamento do Mês</h2>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
                   </span>
                   <span className="text-gray-900 dark:text-gray-100">{formatCurrency(budgetSummary.planned)}</span>
                 </div>
-                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
@@ -344,7 +344,7 @@ export default function DashboardPage() {
         {/* Gráficos */}
         <div className="mb-8 grid gap-6 lg:grid-cols-2">
           {/* Gráfico de Pizza */}
-          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Gastos por Categoria</h2>
             {categoryData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
@@ -358,7 +358,7 @@ export default function DashboardPage() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex h-[300px] items-center justify-center text-gray-400">Nenhuma despesa no período</div>
+              <div className="flex h-[300px] items-center justify-center text-gray-400 dark:text-gray-500">Nenhuma despesa no período</div>
             )}
             <div className="mt-4 flex flex-wrap gap-3">
               {categoryData.map((cat) => (
@@ -371,7 +371,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Gráfico de Barras */}
-          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Evolução Mensal</h2>
             {monthlyData.some((d) => d.income > 0 || d.expense > 0) ? (
               <ResponsiveContainer width="100%" height={300}>
@@ -386,7 +386,7 @@ export default function DashboardPage() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex h-[300px] items-center justify-center text-gray-400">Sem dados nos últimos meses</div>
+              <div className="flex h-[300px] items-center justify-center text-gray-400 dark:text-gray-500">Sem dados nos últimos meses</div>
             )}
           </div>
         </div>
@@ -397,7 +397,7 @@ export default function DashboardPage() {
             <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Saldo por Conta</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {accounts.map((acc) => (
-                <div key={acc.id} className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+                <div key={acc.id} className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: acc.color + "20", color: acc.color }}>
                       <CreditCard className="h-5 w-5" />
@@ -414,16 +414,16 @@ export default function DashboardPage() {
         )}
 
         {/* Últimas Transações */}
-        <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
           <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Últimas Transações</h2>
           <div className="space-y-3">
             {recentTransactions.length === 0 ? (
-              <p className="text-gray-400">Nenhuma transação recente</p>
+              <p className="text-gray-400 dark:text-gray-500">Nenhuma transação recente</p>
             ) : (
               recentTransactions.map((t) => (
-                <div key={t.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                <div key={t.id} className="flex items-center justify-between rounded-lg border border-gray-100 dark:border-gray-800 p-3">
                   <div className="flex items-center gap-3">
-                    <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+                    <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-green-100 dark:bg-green-900/30 text-green-600" : "bg-red-100 dark:bg-red-900/30 text-red-600"}`}>
                       {t.type === "income" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     </div>
                     <div>

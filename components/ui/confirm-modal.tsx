@@ -27,10 +27,10 @@ export function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg">
+      <div className="w-full max-w-sm rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg">
         <div className="flex items-center gap-3">
           {variant === "danger" && (
-            <div className="rounded-full bg-red-100 p-2">
+            <div className="rounded-full bg-red-100 dark:bg-red-900/30 p-2">
               <AlertTriangle className="h-5 w-5 text-red-600" />
             </div>
           )}
@@ -40,7 +40,7 @@ export function ConfirmModal({
         <div className="mt-6 flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-gray-900"
+            className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-900"
           >
             {cancelText}
           </button>

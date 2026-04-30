@@ -240,14 +240,14 @@ export default function OrcamentosPage() {
               type="month"
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Resumo geral */}
         <div className="mb-6 grid gap-4 sm:grid-cols-4">
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Receita planejada</p>
             <input
               type="number"
@@ -255,11 +255,11 @@ export default function OrcamentosPage() {
               min="0"
               value={totalIncome}
               onChange={(e) => setTotalIncome(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-lg font-bold text-green-600 focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-lg font-bold text-green-600 focus:border-blue-500 focus:outline-none"
               placeholder="R$ 0,00"
             />
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Despesa planejada</p>
             <input
               type="number"
@@ -267,11 +267,11 @@ export default function OrcamentosPage() {
               min="0"
               value={totalExpense}
               onChange={(e) => setTotalExpense(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-lg font-bold text-red-600 focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-lg font-bold text-red-600 focus:border-blue-500 focus:outline-none"
               placeholder="R$ 0,00"
             />
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Meta de economia</p>
             <input
               type="number"
@@ -279,11 +279,11 @@ export default function OrcamentosPage() {
               min="0"
               value={savingsGoal}
               onChange={(e) => setSavingsGoal(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-lg font-bold text-blue-600 focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-lg font-bold text-blue-600 focus:border-blue-500 focus:outline-none"
               placeholder="R$ 0,00"
             />
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
             <p className="text-sm text-gray-500 dark:text-gray-400">Economia estimada</p>
             <p className={`text-lg font-bold ${(parseFloat(totalIncome || "0") - parseFloat(totalExpense || "0") - parseFloat(savingsGoal || "0")) >= 0 ? "text-green-600" : "text-red-600"}`}>
               {formatCurrency(parseFloat(totalIncome || "0") - parseFloat(totalExpense || "0") - parseFloat(savingsGoal || "0"))}
@@ -292,7 +292,7 @@ export default function OrcamentosPage() {
         </div>
 
         {/* Orçamento por categoria */}
-        <div className="mb-6 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="mb-6 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Por Categoria</h2>
             <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -303,8 +303,8 @@ export default function OrcamentosPage() {
           </div>
 
           {categories.length === 0 ? (
-            <div className="py-8 text-center text-gray-400">
-              <Wallet className="mx-auto mb-3 h-10 w-10 text-gray-300" />
+            <div className="py-8 text-center text-gray-400 dark:text-gray-500">
+              <Wallet className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
               <p>Nenhuma categoria de despesa cadastrada</p>
             </div>
           ) : (
@@ -316,7 +316,7 @@ export default function OrcamentosPage() {
                 const overBudget = planned > 0 && spent > planned;
 
                 return (
-                  <div key={cat.id} className="rounded-lg border border-gray-100 p-4">
+                  <div key={cat.id} className="rounded-lg border border-gray-100 dark:border-gray-800 p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="h-4 w-4 rounded-full" style={{ backgroundColor: cat.color }} />
@@ -332,7 +332,7 @@ export default function OrcamentosPage() {
                             min="0"
                             value={planned || ""}
                             onChange={(e) => setCategoryPlan(cat.id, e.target.value)}
-                            className="w-24 rounded border border-gray-300 px-2 py-1 text-right text-sm focus:border-blue-500 focus:outline-none"
+                            className="w-24 rounded border border-gray-300 dark:border-gray-600 px-2 py-1 text-right text-sm focus:border-blue-500 focus:outline-none"
                             placeholder="0"
                           />
                         </div>
@@ -346,7 +346,7 @@ export default function OrcamentosPage() {
                     </div>
                     {planned > 0 && (
                       <div className="mt-3">
-                        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                           <div
                             className="h-full rounded-full transition-all"
                             style={{
@@ -368,14 +368,14 @@ export default function OrcamentosPage() {
         </div>
 
         {/* Notas e salvar */}
-        <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Observações</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
               placeholder="Notas sobre o orçamento deste mês..."
             />
           </div>

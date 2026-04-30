@@ -57,7 +57,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar desktop */}
-      <aside className="hidden w-64 flex-col border-r border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700 md:flex">
+      <aside className="hidden w-64 flex-col border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 md:flex">
         <div className="flex h-16 items-center border-b border-gray-200 dark:border-gray-700 px-6">
           <Link href="/dashboard" className="text-lg font-bold text-gray-900 dark:text-gray-100">
             Bulma Finanças
@@ -83,11 +83,11 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
             );
           })}
         </nav>
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
           <p className="truncate text-xs text-gray-500 dark:text-gray-400">{userEmail}</p>
           <button
             onClick={handleLogout}
-            className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+            className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
           >
             <LogOut className="h-4 w-4" />
             Sair
@@ -97,13 +97,13 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
 
       {/* Mobile header */}
       <div className="flex flex-1 flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden">
+        <header className="flex h-16 items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 md:hidden">
           <Link href="/dashboard" className="text-lg font-bold text-gray-900 dark:text-gray-100">
             Bulma Finanças
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="rounded-lg p-2 text-gray-700 hover:bg-gray-100"
+            className="rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
           >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -116,12 +116,12 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
               className="flex-1 bg-black/50"
               onClick={() => setSidebarOpen(false)}
             />
-            <div className="w-64 bg-white shadow-lg">
-              <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
+            <div className="w-64 bg-white dark:bg-gray-800 shadow-lg">
+              <div className="flex h-16 items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4">
                 <span className="text-lg font-bold text-gray-900 dark:text-gray-100">Menu</span>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="rounded-lg p-2 text-gray-700 hover:bg-gray-100"
+                  className="rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -138,7 +138,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
                       className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
                         active
                           ? "bg-blue-50 text-blue-700"
-                          : "text-gray-700 hover:bg-gray-100"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
                       }`}
                     >
                       <Icon className="h-5 w-5" />
@@ -147,14 +147,14 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
                   );
                 })}
               </nav>
-              <div className="border-t border-gray-200 p-4">
+              <div className="border-t border-gray-200 dark:border-gray-700 p-4">
                 <p className="truncate text-xs text-gray-500 dark:text-gray-400">{userEmail}</p>
                 <button
                   onClick={() => {
                     setSidebarOpen(false);
                     toggleTheme();
                   }}
-                  className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
                 >
                   {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                   {theme === "dark" ? "Modo claro" : "Modo escuro"}
@@ -164,7 +164,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
                     setSidebarOpen(false);
                     handleLogout();
                   }}
-                  className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
                 >
                   <LogOut className="h-4 w-4" />
                   Sair
@@ -177,7 +177,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
         <main className="flex-1 overflow-auto">{children}</main>
 
         {/* Footer */}
-        <footer className="border-t border-gray-200 bg-white py-4 text-center text-xs text-gray-400">
+        <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 text-center text-xs text-gray-400 dark:text-gray-500">
           Bulma Finanças v2 • Desenvolvido por Rael
         </footer>
       </div>

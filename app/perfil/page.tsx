@@ -80,7 +80,7 @@ export default function PerfilPage() {
         <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
 
         {/* Dados do perfil */}
-        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="mt-6 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
           <div className="mb-4 flex items-center gap-2">
             <User className="h-5 w-5 text-blue-600" />
             <h2 className="text-lg font-semibold">Dados pessoais</h2>
@@ -94,7 +94,7 @@ export default function PerfilPage() {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
                 placeholder="Seu nome"
               />
             </div>
@@ -110,7 +110,7 @@ export default function PerfilPage() {
         </div>
 
         {/* Alterar senha */}
-        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="mt-6 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
           <div className="mb-4 flex items-center gap-2">
             <Lock className="h-5 w-5 text-blue-600" />
             <h2 className="text-lg font-semibold">Alterar senha</h2>
@@ -124,7 +124,7 @@ export default function PerfilPage() {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
                 placeholder="Mínimo 6 caracteres"
                 minLength={6}
               />

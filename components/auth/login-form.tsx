@@ -83,7 +83,7 @@ export function LoginForm() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-4 py-2 focus:border-blue-500 focus:outline-none"
           />
           {fieldErrors.email && (
             <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
@@ -98,7 +98,7 @@ export function LoginForm() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-4 py-2 focus:border-blue-500 focus:outline-none"
           />
           {fieldErrors.password && (
             <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
@@ -109,8 +109,8 @@ export function LoginForm() {
           <div
             className={`rounded-lg p-3 text-sm ${
               message.includes("Verifique") || message.includes("sucesso")
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+                ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
             }`}
           >
             {message}

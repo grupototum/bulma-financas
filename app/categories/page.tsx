@@ -180,27 +180,27 @@ export default function CategoriesPage() {
         </div>
 
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="mb-8 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">{editingId ? "Editar Categoria" : "Nova Categoria"}</h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" />
                 {formErrors.name && <p className="mt-1 text-xs text-red-600">{formErrors.name}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Ícone</label>
-                <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" maxLength={2} />
+                <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" maxLength={2} />
                 {formErrors.icon && <p className="mt-1 text-xs text-red-600">{formErrors.icon}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Orçamento (R$)</label>
-                <input type="number" step="0.01" min="0" value={budgetLimit} onChange={(e) => setBudgetLimit(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
+                <input type="number" step="0.01" min="0" value={budgetLimit} onChange={(e) => setBudgetLimit(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" />
                 {formErrors.budget_limit && <p className="mt-1 text-xs text-red-600">{formErrors.budget_limit}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
-                <select value={type} onChange={(e) => setType(e.target.value as any)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none">
+                <select value={type} onChange={(e) => setType(e.target.value as any)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none">
                   <option value="expense">Despesa</option>
                   <option value="income">Receita</option>
                   <option value="both">Ambos</option>
@@ -219,7 +219,7 @@ export default function CategoriesPage() {
                   {saving ? "Salvando..." : editingId ? "Atualizar" : "Salvar"}
                 </button>
                 {editingId && (
-                  <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cancelar</button>
+                  <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800">Cancelar</button>
                 )}
               </div>
             </form>
@@ -228,10 +228,10 @@ export default function CategoriesPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.length === 0 ? (
-            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm dark:shadow-gray-900/20">Nenhuma categoria ainda</div>
+            <div className="col-span-full rounded-xl bg-white dark:bg-gray-800 p-8 text-center text-gray-400 dark:text-gray-500 shadow-sm dark:shadow-gray-900/20">Nenhuma categoria ainda</div>
           ) : (
             categories.map((c) => (
-              <div key={c.id} className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+              <div key={c.id} className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg text-lg" style={{ backgroundColor: c.color + "20", color: c.color }}>
@@ -243,8 +243,8 @@ export default function CategoriesPage() {
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => startEdit(c)} className="rounded p-1 text-gray-400 hover:bg-blue-100 hover:text-blue-600"><Pencil className="h-4 w-4" /></button>
-                    <button onClick={() => setConfirmModal({ open: true, id: c.id })} className="rounded p-1 text-gray-400 hover:bg-red-100 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+                    <button onClick={() => startEdit(c)} className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-blue-100 dark:bg-blue-900/30 hover:text-blue-600"><Pencil className="h-4 w-4" /></button>
+                    <button onClick={() => setConfirmModal({ open: true, id: c.id })} className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-red-100 dark:bg-red-900/30 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
                 {c.budget_limit && (
