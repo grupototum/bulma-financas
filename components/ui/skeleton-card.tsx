@@ -18,7 +18,7 @@ export function SkeletonRow({ count = 3 }: { count?: number }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="animate-pulse rounded-lg bg-white p-4 shadow-sm">
+        <div key={i} className="animate-pulse rounded-lg bg-white p-4 shadow-sm dark:shadow-gray-900/20">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-lg bg-gray-200" />
             <div className="flex-1 space-y-2">

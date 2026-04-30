@@ -223,7 +223,7 @@ export default function ContasPage() {
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Contas</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Contas</h1>
           <div className="flex gap-3">
             <button
               onClick={() => { resetForm(); setShowTransfer(false); setShowForm(!showForm); }}
@@ -244,25 +244,25 @@ export default function ContasPage() {
 
         {/* Form Conta */}
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">{editingId ? "Editar Conta" : "Nova Conta"}</h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nome</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Tipo</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
                 <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none">
                   {accountTypeOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Saldo inicial (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Saldo inicial (R$)</label>
                 <input type="number" step="0.01" value={balance} onChange={(e) => setBalance(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
-                <label className="block text-sm font-medium text-gray-700">Cor</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cor</label>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {colorOptions.map((c) => (
                     <button key={c} type="button" onClick={() => setColor(c)} className={`h-8 w-8 rounded-full border-2 ${color === c ? "border-gray-900" : "border-transparent"}`} style={{ backgroundColor: c }} />
@@ -283,33 +283,33 @@ export default function ContasPage() {
 
         {/* Form Transferência */}
         {showTransfer && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">Transferência entre Contas</h2>
             <form onSubmit={handleTransfer} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">De</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">De</label>
                 <select value={fromAccountId} onChange={(e) => setFromAccountId(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required>
                   <option value="">Selecione...</option>
                   {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Para</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Para</label>
                 <select value={toAccountId} onChange={(e) => setToAccountId(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required>
                   <option value="">Selecione...</option>
                   {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Valor (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor (R$)</label>
                 <input type="number" step="0.01" min="0" value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Data</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data</label>
                 <input type="date" value={transferDate} onChange={(e) => setTransferDate(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
               </div>
               <div className="sm:col-span-2 lg:col-span-4">
-                <label className="block text-sm font-medium text-gray-700">Descrição (opcional)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Descrição (opcional)</label>
                 <input type="text" value={transferDescription} onChange={(e) => setTransferDescription(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" placeholder="Ex: Transferência para reserva" />
               </div>
               <div className="sm:col-span-2 lg:col-span-4 flex gap-3">
@@ -325,22 +325,22 @@ export default function ContasPage() {
         {/* Lista de Contas */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {accounts.length === 0 ? (
-            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm">
+            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm dark:shadow-gray-900/20">
               <Wallet className="mx-auto mb-3 h-10 w-10 text-gray-300" />
               <p>Nenhuma conta cadastrada ainda</p>
               <p className="mt-1 text-sm">Adicione suas contas bancárias e carteiras</p>
             </div>
           ) : (
             accounts.map((acc) => (
-              <div key={acc.id} className="rounded-xl bg-white p-5 shadow-sm">
+              <div key={acc.id} className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: acc.color + "20", color: acc.color }}>
                       {accountTypeIcons[acc.type] || <Wallet className="h-5 w-5" />}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{acc.name}</p>
-                      <p className="text-xs text-gray-500">{accountTypeLabels[acc.type] || acc.type}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{acc.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{accountTypeLabels[acc.type] || acc.type}</p>
                     </div>
                   </div>
                   <div className="flex gap-1">
@@ -349,8 +349,8 @@ export default function ContasPage() {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <p className="text-sm text-gray-500">Saldo</p>
-                  <p className="text-xl font-bold text-gray-900">{formatCurrency(acc.balance)}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{formatCurrency(acc.balance)}</p>
                 </div>
               </div>
             ))

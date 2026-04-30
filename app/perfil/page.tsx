@@ -76,18 +76,18 @@ export default function PerfilPage() {
   return (
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900">Meu Perfil</h1>
-        <p className="text-gray-500">{user?.email}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Meu Perfil</h1>
+        <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
 
         {/* Dados do perfil */}
-        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
           <div className="mb-4 flex items-center gap-2">
             <User className="h-5 w-5 text-blue-600" />
             <h2 className="text-lg font-semibold">Dados pessoais</h2>
           </div>
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Nome completo
               </label>
               <input
@@ -110,14 +110,14 @@ export default function PerfilPage() {
         </div>
 
         {/* Alterar senha */}
-        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
           <div className="mb-4 flex items-center gap-2">
             <Lock className="h-5 w-5 text-blue-600" />
             <h2 className="text-lg font-semibold">Alterar senha</h2>
           </div>
           <form onSubmit={handleChangePassword} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Nova senha
               </label>
               <input

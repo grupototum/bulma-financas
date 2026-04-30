@@ -13,8 +13,8 @@ export default function Home() {
             height={120}
             className="rounded-2xl shadow-lg"
           />
-          <h1 className="text-3xl font-bold text-gray-900">Bulma Finanças</h1>
-          <p className="text-gray-600">Sistema financeiro pessoal do Rael</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Bulma Finanças</h1>
+          <p className="text-gray-600 dark:text-gray-400">Sistema financeiro pessoal do Rael</p>
         </div>
         <LoginForm />
       </div>

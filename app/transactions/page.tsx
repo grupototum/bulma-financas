@@ -20,6 +20,8 @@ import {
   ArrowUpDown,
   Filter,
   X,
+  Repeat,
+  Upload,
 } from "lucide-react";
 
 interface Transaction {
@@ -30,6 +32,8 @@ interface Transaction {
   date: string;
   category_id: string | null;
   account_id: string | null;
+  is_recurring: boolean;
+  recurring_interval: string | null;
   category?: { name: string; color: string } | null;
   account?: { name: string } | null;
 }
@@ -65,6 +69,8 @@ export default function TransactionsPage() {
   const [categoryId, setCategoryId] = useState("");
   const [accountId, setAccountId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [recurringInterval, setRecurringInterval] = useState<"daily" | "weekly" | "monthly" | "yearly">("monthly");
   const [saving, setSaving] = useState(false);
   const [autoCatSuggestion, setAutoCatSuggestion] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -85,6 +91,17 @@ export default function TransactionsPage() {
     open: boolean;
     id: string;
   }>({ open: false, id: "" });
+
+  // Import CSV
+  const [showImport, setShowImport] = useState(false);
+  const [csvPreview, setCsvPreview] = useState<string[][]>([]);
+  const [csvSeparator, setCsvSeparator] = useState(";");
+  const [colDate, setColDate] = useState(0);
+  const [colDescription, setColDescription] = useState(1);
+  const [colAmount, setColAmount] = useState(2);
+  const [colType, setColType] = useState(-1);
+  const [importAccountId, setImportAccountId] = useState("");
+  const [importing, setImporting] = useState(false);
 
   // Auto-categorização
   useEffect(() => {
@@ -133,6 +150,8 @@ export default function TransactionsPage() {
     setCategoryId("");
     setAccountId("");
     setDate(new Date().toISOString().split("T")[0]);
+    setIsRecurring(false);
+    setRecurringInterval("monthly");
     setAutoCatSuggestion(null);
     setFormErrors({});
     setEditingId(null);
@@ -146,6 +165,8 @@ export default function TransactionsPage() {
     setCategoryId(tx.category_id || "");
     setAccountId(tx.account_id || "");
     setDate(tx.date);
+    setIsRecurring(tx.is_recurring);
+    setRecurringInterval((tx.recurring_interval as any) || "monthly");
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -191,6 +212,8 @@ export default function TransactionsPage() {
       category_id: finalCategoryId || null,
       account_id: accountId || null,
       date,
+      is_recurring: isRecurring,
+      recurring_interval: isRecurring ? recurringInterval : null,
     };
 
     if (editingId) {
@@ -222,6 +245,154 @@ export default function TransactionsPage() {
       .limit(100);
     if (txs) setTransactions(txs as Transaction[]);
     setSaving(false);
+  }
+
+  function getNextDate(currentDate: string, interval: string): string {
+    const d = new Date(currentDate);
+    switch (interval) {
+      case "daily": d.setDate(d.getDate() + 1); break;
+      case "weekly": d.setDate(d.getDate() + 7); break;
+      case "monthly": d.setMonth(d.getMonth() + 1); break;
+      case "yearly": d.setFullYear(d.getFullYear() + 1); break;
+    }
+    return d.toISOString().split("T")[0];
+  }
+
+  function parseCSV(text: string): string[][] {
+    const lines = text.trim().split(/\r?\n/);
+    return lines.map((line) => line.split(csvSeparator));
+  }
+
+  function detectSeparator(text: string): string {
+    const firstLine = text.split(/\r?\n/)[0] || "";
+    const semicolons = (firstLine.match(/;/g) || []).length;
+    const commas = (firstLine.match(/,/g) || []).length;
+    return semicolons >= commas ? ";" : ",";
+  }
+
+  function parseDate(value: string): string {
+    // Tenta formatos comuns: DD/MM/YYYY, YYYY-MM-DD, DD-MM-YYYY
+    const trimmed = value.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+    const parts = trimmed.split(/[\/\-]/);
+    if (parts.length === 3) {
+      const [d1, d2, d3] = parts.map((p) => parseInt(p, 10));
+      if (d1 > 31) return `${d1}-${String(d2).padStart(2, "0")}-${String(d3).padStart(2, "0")}`;
+      return `${d3}-${String(d2).padStart(2, "0")}-${String(d1).padStart(2, "0")}`;
+    }
+    return trimmed;
+  }
+
+  function parseAmount(value: string): number {
+    const cleaned = value.replace(/R\$\s?/g, "").replace(/\./g, "").replace(",", ".");
+    return parseFloat(cleaned) || 0;
+  }
+
+  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      const sep = detectSeparator(text);
+      setCsvSeparator(sep);
+      const rows = parseCSV(text);
+      setCsvPreview(rows.slice(0, 6));
+      // Tenta detectar colunas automaticamente
+      if (rows.length > 0) {
+        const header = rows[0].map((h) => h.toLowerCase().trim());
+        header.forEach((h, idx) => {
+          if (h.includes("data") || h.includes("date")) setColDate(idx);
+          if (h.includes("desc") || h.includes("hist") || h.includes("identif")) setColDescription(idx);
+          if (h.includes("valor") || h.includes("amount") || h.includes("credit") || h.includes("debit")) setColAmount(idx);
+          if (h.includes("tipo") || h.includes("type")) setColType(idx);
+        });
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  async function handleImport() {
+    if (csvPreview.length < 2) { toast.error("CSV vazio ou inválido"); return; }
+    setImporting(true);
+    const supabase = createClient();
+    const rows = csvPreview.length > 6 ? csvPreview : parseCSV((document.getElementById("csv-text") as HTMLTextAreaElement)?.value || "");
+    const dataRows = rows.slice(1);
+    const toInsert = [];
+
+    for (const row of dataRows) {
+      if (row.length < 3) continue;
+      const dateVal = parseDate(row[colDate] || "");
+      const descVal = (row[colDescription] || "").trim();
+      const amountVal = parseAmount(row[colAmount] || "0");
+      if (!dateVal || !descVal || amountVal === 0) continue;
+
+      let typeVal: "expense" | "income" = "expense";
+      if (colType >= 0 && row[colType]) {
+        const t = row[colType].toLowerCase();
+        if (t.includes("receita") || t.includes("credito") || t.includes("credit") || t.includes("entrada")) typeVal = "income";
+      } else if (amountVal < 0) {
+        typeVal = "income";
+      }
+
+      toInsert.push({
+        user_id: user.id,
+        description: descVal,
+        amount: Math.abs(amountVal),
+        type: typeVal,
+        date: dateVal,
+        account_id: importAccountId || null,
+      });
+    }
+
+    if (toInsert.length === 0) { toast.error("Nenhuma transação válida encontrada"); setImporting(false); return; }
+
+    const { error } = await supabase.from("transactions").insert(toInsert);
+    if (error) {
+      toast.error("Erro ao importar: " + error.message);
+    } else {
+      toast.success(`${toInsert.length} transações importadas!`);
+      setShowImport(false);
+      setCsvPreview([]);
+      // Recarregar
+      const { data: txs } = await supabase
+        .from("transactions")
+        .select("*, category:categories(name, color), account:accounts(name)")
+        .eq("user_id", user.id)
+        .order("date", { ascending: false })
+        .limit(100);
+      if (txs) setTransactions(txs as Transaction[]);
+    }
+    setImporting(false);
+  }
+
+  async function generateNextOccurrence(tx: Transaction) {
+    if (!tx.is_recurring || !tx.recurring_interval) return;
+    const nextDate = getNextDate(tx.date, tx.recurring_interval);
+    const supabase = createClient();
+    const { error } = await supabase.from("transactions").insert({
+      user_id: user.id,
+      description: tx.description,
+      amount: tx.amount,
+      type: tx.type,
+      category_id: tx.category_id,
+      account_id: tx.account_id,
+      date: nextDate,
+      is_recurring: false,
+      recurring_interval: null,
+    });
+    if (error) {
+      toast.error("Erro ao gerar ocorrência: " + error.message);
+    } else {
+      toast.success("Próxima ocorrência gerada!");
+      const { data: txs } = await supabase
+        .from("transactions")
+        .select("*, category:categories(name, color), account:accounts(name)")
+        .eq("user_id", user.id)
+        .order("date", { ascending: false })
+        .limit(100);
+      if (txs) setTransactions(txs as Transaction[]);
+    }
   }
 
   async function deleteTransaction(id: string) {
@@ -285,28 +456,41 @@ export default function TransactionsPage() {
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Transações</h1>
-          <button
-            onClick={() => {
-              resetForm();
-              setShowForm(!showForm);
-            }}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            <Plus className="h-4 w-4" />
-            {showForm ? "Cancelar" : editingId ? "Editando..." : "Nova Transação"}
-          </button>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Transações</h1>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                resetForm();
+                setShowImport(false);
+                setShowForm(!showForm);
+              }}
+              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4" />
+              {showForm ? "Cancelar" : editingId ? "Editando..." : "Nova Transação"}
+            </button>
+            <button
+              onClick={() => {
+                setShowForm(false);
+                setShowImport(!showImport);
+              }}
+              className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+            >
+              <Upload className="h-4 w-4" />
+              {showImport ? "Cancelar" : "Importar CSV"}
+            </button>
+          </div>
         </div>
 
         {/* Form */}
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">
               {editingId ? "Editar Transação" : "Nova Transação"}
             </h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Descrição</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Descrição</label>
                 <input
                   type="text"
                   value={description}
@@ -323,7 +507,7 @@ export default function TransactionsPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Valor (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor (R$)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -335,7 +519,7 @@ export default function TransactionsPage() {
                 {formErrors.amount && <p className="mt-1 text-xs text-red-600">{formErrors.amount}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Tipo</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value as "expense" | "income")}
@@ -346,7 +530,7 @@ export default function TransactionsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Categoria</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Categoria</label>
                 <select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
@@ -359,7 +543,7 @@ export default function TransactionsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Conta</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Conta</label>
                 <select
                   value={accountId}
                   onChange={(e) => setAccountId(e.target.value)}
@@ -372,7 +556,7 @@ export default function TransactionsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Data</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data</label>
                 <input
                   type="date"
                   value={date}
@@ -380,6 +564,29 @@ export default function TransactionsPage() {
                   className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                 />
                 {formErrors.date && <p className="mt-1 text-xs text-red-600">{formErrors.date}</p>}
+              </div>
+              <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-3">
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <input
+                    type="checkbox"
+                    checked={isRecurring}
+                    onChange={(e) => setIsRecurring(e.target.checked)}
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  Transação recorrente
+                </label>
+                {isRecurring && (
+                  <select
+                    value={recurringInterval}
+                    onChange={(e) => setRecurringInterval(e.target.value as any)}
+                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="daily">Diária</option>
+                    <option value="weekly">Semanal</option>
+                    <option value="monthly">Mensal</option>
+                    <option value="yearly">Anual</option>
+                  </select>
+                )}
               </div>
               <div className="sm:col-span-2 lg:col-span-3 flex gap-3">
                 <button
@@ -400,6 +607,98 @@ export default function TransactionsPage() {
                 )}
               </div>
             </form>
+          </div>
+        )}
+
+        {/* Import CSV */}
+        {showImport && (
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold">Importar Extrato CSV</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Arquivo CSV</label>
+                <input
+                  type="file"
+                  accept=".csv,.txt"
+                  onChange={handleFileUpload}
+                  className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-blue-700"
+                />
+              </div>
+
+              {csvPreview.length > 0 && (
+                <>
+                  <div className="overflow-x-auto rounded-lg border border-gray-200">
+                    <table className="min-w-full text-sm">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          {csvPreview[0].map((cell, i) => (
+                            <th key={i} className="px-3 py-2 text-left text-xs font-medium text-gray-500">{cell}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {csvPreview.slice(1).map((row, ri) => (
+                          <tr key={ri}>
+                            {row.map((cell, ci) => (
+                              <td key={ci} className="px-3 py-2 text-gray-700">{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500">Coluna Data</label>
+                      <input type="number" min={0} value={colDate} onChange={(e) => setColDate(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500">Coluna Descrição</label>
+                      <input type="number" min={0} value={colDescription} onChange={(e) => setColDescription(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500">Coluna Valor</label>
+                      <input type="number" min={0} value={colAmount} onChange={(e) => setColAmount(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500">Coluna Tipo (-1 = auto)</label>
+                      <input type="number" min={-1} value={colType} onChange={(e) => setColType(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Conta padrão</label>
+                    <select
+                      value={importAccountId}
+                      onChange={(e) => setImportAccountId(e.target.value)}
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                    >
+                      <option value="">Nenhuma</option>
+                      {accounts.map((a) => (
+                        <option key={a.id} value={a.id}>{a.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleImport}
+                      disabled={importing}
+                      className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                    >
+                      {importing ? "Importando..." : "Importar Transações"}
+                    </button>
+                    <button
+                      onClick={() => { setShowImport(false); setCsvPreview([]); }}
+                      className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
 
@@ -428,10 +727,10 @@ export default function TransactionsPage() {
           </div>
 
           {showFilters && (
-            <div className="rounded-xl bg-white p-4 shadow-sm">
+            <div className="rounded-xl bg-white p-4 shadow-sm dark:shadow-gray-900/20">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500">Categoria</label>
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Categoria</label>
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
@@ -444,7 +743,7 @@ export default function TransactionsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500">Tipo</label>
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Tipo</label>
                   <select
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value as any)}
@@ -456,7 +755,7 @@ export default function TransactionsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500">Mês</label>
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Mês</label>
                   <input
                     type="month"
                     value={filterMonth}
@@ -468,7 +767,7 @@ export default function TransactionsPage() {
               <div className="mt-3 flex gap-2">
                 <button
                   onClick={() => { setFilterCategory(""); setFilterType(""); setFilterMonth(""); setSearchQuery(""); }}
-                  className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
+                  className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 dark:bg-gray-900"
                 >
                   <X className="h-3 w-3" /> Limpar filtros
                 </button>
@@ -479,7 +778,7 @@ export default function TransactionsPage() {
 
         {/* Sort & Count */}
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             {filteredTransactions.length} transação{filteredTransactions.length !== 1 ? "es" : ""}
           </p>
           <div className="flex gap-2">
@@ -490,7 +789,7 @@ export default function TransactionsPage() {
                 className={`flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs font-medium ${
                   sortBy === field
                     ? "border-blue-500 bg-blue-50 text-blue-700"
-                    : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                    : "border-gray-300 text-gray-600 hover:bg-gray-50 dark:bg-gray-900"
                 }`}
               >
                 <ArrowUpDown className="h-3 w-3" />
@@ -502,7 +801,7 @@ export default function TransactionsPage() {
         </div>
 
         {/* Lista */}
-        <div className="rounded-xl bg-white shadow-sm">
+        <div className="rounded-xl bg-white shadow-sm dark:shadow-gray-900/20">
           <div className="divide-y divide-gray-100">
             {filteredTransactions.length === 0 ? (
               <div className="p-8 text-center text-gray-400">
@@ -510,14 +809,14 @@ export default function TransactionsPage() {
               </div>
             ) : (
               filteredTransactions.map((t) => (
-                <div key={t.id} className="flex items-center justify-between p-4 hover:bg-gray-50">
+                <div key={t.id} className="flex items-center justify-between p-4 hover:bg-gray-50 dark:bg-gray-900">
                   <div className="flex items-center gap-3">
                     <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
                       {t.type === "income" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{t.description}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{t.description}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {t.category?.name || "Sem categoria"} {t.account?.name ? `• ${t.account.name}` : ""} • {new Date(t.date).toLocaleDateString("pt-BR")}
                       </p>
                     </div>
@@ -526,6 +825,15 @@ export default function TransactionsPage() {
                     <p className={`font-semibold ${t.type === "income" ? "text-green-600" : "text-red-600"}`}>
                       {t.type === "income" ? "+" : "-"}{formatCurrency(t.amount)}
                     </p>
+                    {t.is_recurring && (
+                      <button
+                        onClick={() => generateNextOccurrence(t)}
+                        title="Gerar próxima ocorrência"
+                        className="rounded p-1 text-purple-400 hover:bg-purple-100 hover:text-purple-600"
+                      >
+                        <Repeat className="h-4 w-4" />
+                      </button>
+                    )}
                     <button
                       onClick={() => startEdit(t)}
                       className="rounded p-1 text-gray-400 hover:bg-blue-100 hover:text-blue-600"

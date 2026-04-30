@@ -169,7 +169,7 @@ export default function CategoriesPage() {
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Categorias</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Categorias</h1>
           <button
             onClick={() => { resetForm(); setShowForm(!showForm); }}
             className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
@@ -180,26 +180,26 @@ export default function CategoriesPage() {
         </div>
 
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">{editingId ? "Editar Categoria" : "Nova Categoria"}</h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nome</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
                 {formErrors.name && <p className="mt-1 text-xs text-red-600">{formErrors.name}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Ícone</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Ícone</label>
                 <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" maxLength={2} />
                 {formErrors.icon && <p className="mt-1 text-xs text-red-600">{formErrors.icon}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Orçamento (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Orçamento (R$)</label>
                 <input type="number" step="0.01" min="0" value={budgetLimit} onChange={(e) => setBudgetLimit(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
                 {formErrors.budget_limit && <p className="mt-1 text-xs text-red-600">{formErrors.budget_limit}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Tipo</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
                 <select value={type} onChange={(e) => setType(e.target.value as any)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none">
                   <option value="expense">Despesa</option>
                   <option value="income">Receita</option>
@@ -207,7 +207,7 @@ export default function CategoriesPage() {
                 </select>
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
-                <label className="block text-sm font-medium text-gray-700">Cor</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cor</label>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {colorOptions.map((c) => (
                     <button key={c} type="button" onClick={() => setColor(c)} className={`h-8 w-8 rounded-full border-2 ${color === c ? "border-gray-900" : "border-transparent"}`} style={{ backgroundColor: c }} />
@@ -228,18 +228,18 @@ export default function CategoriesPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.length === 0 ? (
-            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm">Nenhuma categoria ainda</div>
+            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm dark:shadow-gray-900/20">Nenhuma categoria ainda</div>
           ) : (
             categories.map((c) => (
-              <div key={c.id} className="rounded-xl bg-white p-5 shadow-sm">
+              <div key={c.id} className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg text-lg" style={{ backgroundColor: c.color + "20", color: c.color }}>
                       {c.icon}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{c.name}</p>
-                      <p className="text-xs capitalize text-gray-500">{c.type === "expense" ? "Despesa" : c.type === "income" ? "Receita" : "Ambos"}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{c.name}</p>
+                      <p className="text-xs capitalize text-gray-500 dark:text-gray-400">{c.type === "expense" ? "Despesa" : c.type === "income" ? "Receita" : "Ambos"}</p>
                     </div>
                   </div>
                   <div className="flex gap-1">
@@ -250,7 +250,7 @@ export default function CategoriesPage() {
                 {c.budget_limit && (
                   <div className="mt-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Orçamento</span>
+                      <span className="text-gray-500 dark:text-gray-400">Orçamento</span>
                       <span className="font-medium">{formatCurrency(c.budget_limit)}</span>
                     </div>
                   </div>

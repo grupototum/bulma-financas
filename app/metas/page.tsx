@@ -190,7 +190,7 @@ export default function MetasPage() {
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Metas de Economia</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Metas de Economia</h1>
           <button
             onClick={() => { resetForm(); setShowDeposit(false); setShowForm(!showForm); }}
             className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
@@ -202,27 +202,27 @@ export default function MetasPage() {
 
         {/* Form Meta */}
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">{editingId ? "Editar Meta" : "Nova Meta"}</h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nome</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Valor alvo (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor alvo (R$)</label>
                 <input type="number" step="0.01" min="0" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Valor atual (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor atual (R$)</label>
                 <input type="number" step="0.01" min="0" value={currentAmount} onChange={(e) => setCurrentAmount(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Prazo (opcional)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Prazo (opcional)</label>
                 <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
-                <label className="block text-sm font-medium text-gray-700">Cor</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cor</label>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {colorOptions.map((c) => (
                     <button key={c} type="button" onClick={() => setColor(c)} className={`h-8 w-8 rounded-full border-2 ${color === c ? "border-gray-900" : "border-transparent"}`} style={{ backgroundColor: c }} />
@@ -243,11 +243,11 @@ export default function MetasPage() {
 
         {/* Form Aporte */}
         {showDeposit && depositGoalId && (
-          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <h2 className="mb-4 text-lg font-semibold">Aportar na Meta</h2>
             <form onSubmit={handleDeposit} className="flex items-end gap-3">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Valor do aporte (R$)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor do aporte (R$)</label>
                 <input type="number" step="0.01" min="0" value={depositValue} onChange={(e) => setDepositValue(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
               </div>
               <button type="submit" className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700">
@@ -262,7 +262,7 @@ export default function MetasPage() {
         {/* Lista de Metas */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {goals.length === 0 ? (
-            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm">
+            <div className="col-span-full rounded-xl bg-white p-8 text-center text-gray-400 shadow-sm dark:shadow-gray-900/20">
               <Target className="mx-auto mb-3 h-10 w-10 text-gray-300" />
               <p>Nenhuma meta cadastrada</p>
               <p className="mt-1 text-sm">Crie metas para acompanhar sua economia</p>
@@ -272,16 +272,16 @@ export default function MetasPage() {
               const pct = progressPct(g.current_amount, g.target_amount);
               const days = daysUntil(g.deadline);
               return (
-                <div key={g.id} className="rounded-xl bg-white p-5 shadow-sm">
+                <div key={g.id} className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: g.color + "20", color: g.color }}>
                         <PiggyBank className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{g.name}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{g.name}</p>
                         {days !== null && (
-                          <p className={`text-xs ${days < 0 ? "text-red-500" : days < 30 ? "text-orange-500" : "text-gray-500"}`}>
+                          <p className={`text-xs ${days < 0 ? "text-red-500" : days < 30 ? "text-orange-500" : "text-gray-500 dark:text-gray-400"}`}>
                             {days < 0 ? `Atrasada ${Math.abs(days)} dias` : days === 0 ? "Vence hoje" : `${days} dias restantes`}
                           </p>
                         )}
@@ -298,13 +298,13 @@ export default function MetasPage() {
 
                   <div className="mt-4">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">{formatCurrency(g.current_amount)}</span>
-                      <span className="font-medium text-gray-700">{formatCurrency(g.target_amount)}</span>
+                      <span className="text-gray-500 dark:text-gray-400">{formatCurrency(g.current_amount)}</span>
+                      <span className="font-medium text-gray-700 dark:text-gray-300">{formatCurrency(g.target_amount)}</span>
                     </div>
                     <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-gray-100">
                       <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: g.color }} />
                     </div>
-                    <p className="mt-1 text-right text-xs text-gray-500">{pct}% concluído</p>
+                    <p className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400">{pct}% concluído</p>
                   </div>
                 </div>
               );

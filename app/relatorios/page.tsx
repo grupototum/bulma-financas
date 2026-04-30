@@ -149,10 +149,10 @@ export default function RelatoriosPage() {
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Relatórios</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Relatórios</h1>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-500" />
+              <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <input
                 type="month"
                 value={period}
@@ -172,16 +172,16 @@ export default function RelatoriosPage() {
 
         {/* Resumo */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">Receitas</p>
+          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Receitas</p>
             <p className="text-xl font-bold text-green-600">{formatCurrency(totalIncome)}</p>
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">Despesas</p>
+          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Despesas</p>
             <p className="text-xl font-bold text-red-600">{formatCurrency(totalExpense)}</p>
           </div>
-          <div className="rounded-xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-gray-500">Saldo</p>
+          <div className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
             <p className={`text-xl font-bold ${totalIncome - totalExpense >= 0 ? "text-blue-600" : "text-red-600"}`}>
               {formatCurrency(totalIncome - totalExpense)}
             </p>
@@ -189,13 +189,13 @@ export default function RelatoriosPage() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-gray-200">
+        <div className="mb-6 flex gap-2 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setActiveTab("categorias")}
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "categorias"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300"
             }`}
           >
             <Tag className="h-4 w-4" />
@@ -206,7 +206,7 @@ export default function RelatoriosPage() {
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "contas"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300"
             }`}
           >
             <CreditCard className="h-4 w-4" />
@@ -216,7 +216,7 @@ export default function RelatoriosPage() {
 
         {/* Conteúdo */}
         {activeTab === "categorias" ? (
-          <div className="rounded-xl bg-white shadow-sm">
+          <div className="rounded-xl bg-white shadow-sm dark:shadow-gray-900/20">
             {categoryReport.length === 0 ? (
               <div className="p-8 text-center text-gray-400">
                 <Tag className="mx-auto mb-3 h-10 w-10 text-gray-300" />
@@ -229,8 +229,8 @@ export default function RelatoriosPage() {
                     <div className="flex items-center gap-3">
                       <div className="h-4 w-4 rounded-full" style={{ backgroundColor: cat.color }} />
                       <div>
-                        <p className="font-medium text-gray-900">{cat.name}</p>
-                        <p className="text-xs text-gray-500">{cat.count} transação{cat.count !== 1 ? "es" : ""}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{cat.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{cat.count} transação{cat.count !== 1 ? "es" : ""}</p>
                       </div>
                     </div>
                     <p className="font-semibold text-red-600">{formatCurrency(cat.total)}</p>
@@ -240,7 +240,7 @@ export default function RelatoriosPage() {
             )}
           </div>
         ) : (
-          <div className="rounded-xl bg-white shadow-sm">
+          <div className="rounded-xl bg-white shadow-sm dark:shadow-gray-900/20">
             {accountReport.length === 0 ? (
               <div className="p-8 text-center text-gray-400">
                 <CreditCard className="mx-auto mb-3 h-10 w-10 text-gray-300" />
@@ -251,8 +251,8 @@ export default function RelatoriosPage() {
                 {accountReport.map((acc) => (
                   <div key={acc.name} className="flex items-center justify-between p-4">
                     <div>
-                      <p className="font-medium text-gray-900">{acc.name}</p>
-                      <p className="text-xs text-gray-500">{acc.count} transação{acc.count !== 1 ? "es" : ""}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{acc.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{acc.count} transação{acc.count !== 1 ? "es" : ""}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-semibold text-green-600">+{formatCurrency(acc.income)}</p>

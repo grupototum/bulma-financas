@@ -68,15 +68,15 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
           {isSignUp ? "Criar conta" : "Entrar"}
         </h1>
-        <p className="mt-2 text-gray-600">Bulma Finanças</p>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">Bulma Finanças</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Email
           </label>
           <input
@@ -91,7 +91,7 @@ export function LoginForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Senha
           </label>
           <input

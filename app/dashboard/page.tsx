@@ -227,9 +227,9 @@ export default function DashboardPage() {
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header + Filtro */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-gray-500" />
+            <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             <input
               type="month"
               value={period}
@@ -241,37 +241,37 @@ export default function DashboardPage() {
 
         {/* Cards de Resumo */}
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-green-100 p-2">
                 <TrendingUp className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Receitas</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Receitas</p>
                 <p className="text-2xl font-bold text-green-600">{formatCurrency(summary.income)}</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-red-100 p-2">
                 <TrendingDown className="h-5 w-5 text-red-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Despesas</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Despesas</p>
                 <p className="text-2xl font-bold text-red-600">{formatCurrency(summary.expense)}</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-blue-100 p-2">
                 <Wallet className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Saldo</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
                 <p className={`text-2xl font-bold ${summary.balance >= 0 ? "text-blue-600" : "text-red-600"}`}>
                   {formatCurrency(summary.balance)}
                 </p>
@@ -284,44 +284,44 @@ export default function DashboardPage() {
         {(goals.length > 0 || budgetSummary.planned > 0) && (
           <div className="mb-8 grid gap-4 sm:grid-cols-2">
             {goals.length > 0 && (
-              <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
                 <div className="mb-3 flex items-center gap-2">
                   <Target className="h-5 w-5 text-purple-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">Meta em Andamento</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Meta em Andamento</h2>
                 </div>
                 {goals.slice(0, 1).map((g) => {
                   const pct = g.target_amount > 0 ? Math.min(100, Math.round((g.current_amount / g.target_amount) * 100)) : 0;
                   return (
                     <div key={g.id}>
-                      <p className="font-medium text-gray-900">{g.name}</p>
-                      <div className="mt-2 flex justify-between text-sm text-gray-500">
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{g.name}</p>
+                      <div className="mt-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
                         <span>{formatCurrency(g.current_amount)}</span>
                         <span>{formatCurrency(g.target_amount)}</span>
                       </div>
                       <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
                         <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: g.color }} />
                       </div>
-                      <p className="mt-1 text-right text-xs text-gray-500">{pct}% concluído</p>
+                      <p className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400">{pct}% concluído</p>
                     </div>
                   );
                 })}
               </div>
             )}
             {budgetSummary.planned > 0 && (
-              <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
                 <div className="mb-3 flex items-center gap-2">
                   <PiggyBank className="h-5 w-5 text-blue-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">Orçamento do Mês</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Orçamento do Mês</h2>
                 </div>
-                <div className="flex justify-between text-sm text-gray-500">
+                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
                   <span>Gasto</span>
                   <span>Planejado</span>
                 </div>
                 <div className="mt-2 flex justify-between text-lg font-bold">
-                  <span className={budgetSummary.spent > budgetSummary.planned ? "text-red-600" : "text-gray-900"}>
+                  <span className={budgetSummary.spent > budgetSummary.planned ? "text-red-600" : "text-gray-900 dark:text-gray-100"}>
                     {formatCurrency(budgetSummary.spent)}
                   </span>
-                  <span className="text-gray-900">{formatCurrency(budgetSummary.planned)}</span>
+                  <span className="text-gray-900 dark:text-gray-100">{formatCurrency(budgetSummary.planned)}</span>
                 </div>
                 <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-100">
                   <div
@@ -332,7 +332,7 @@ export default function DashboardPage() {
                     }}
                   />
                 </div>
-                <p className="mt-1 text-right text-xs text-gray-500">
+                <p className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400">
                   {budgetSummary.planned > 0 ? Math.round((budgetSummary.spent / budgetSummary.planned) * 100) : 0}% utilizado
                   {budgetSummary.spent > budgetSummary.planned && " (ultrapassado)"}
                 </p>
@@ -344,8 +344,8 @@ export default function DashboardPage() {
         {/* Gráficos */}
         <div className="mb-8 grid gap-6 lg:grid-cols-2">
           {/* Gráfico de Pizza */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">Gastos por Categoria</h2>
+          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Gastos por Categoria</h2>
             {categoryData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -364,15 +364,15 @@ export default function DashboardPage() {
               {categoryData.map((cat) => (
                 <div key={cat.name} className="flex items-center gap-2">
                   <div className="h-3 w-3 rounded-full" style={{ backgroundColor: cat.color }} />
-                  <span className="text-sm text-gray-600">{cat.name} ({formatCurrency(cat.value)})</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{cat.name} ({formatCurrency(cat.value)})</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Gráfico de Barras */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">Evolução Mensal</h2>
+          <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Evolução Mensal</h2>
             {monthlyData.some((d) => d.income > 0 || d.expense > 0) ? (
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={monthlyData}>
@@ -394,17 +394,17 @@ export default function DashboardPage() {
         {/* Saldo por Conta */}
         {accounts.length > 0 && (
           <div className="mb-8">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">Saldo por Conta</h2>
+            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Saldo por Conta</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {accounts.map((acc) => (
-                <div key={acc.id} className="rounded-xl bg-white p-5 shadow-sm">
+                <div key={acc.id} className="rounded-xl bg-white p-5 shadow-sm dark:shadow-gray-900/20">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: acc.color + "20", color: acc.color }}>
                       <CreditCard className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{acc.name}</p>
-                      <p className="text-lg font-bold text-gray-900">{formatCurrency(acc.balance)}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{acc.name}</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{formatCurrency(acc.balance)}</p>
                     </div>
                   </div>
                 </div>
@@ -414,8 +414,8 @@ export default function DashboardPage() {
         )}
 
         {/* Últimas Transações */}
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">Últimas Transações</h2>
+        <div className="rounded-xl bg-white p-6 shadow-sm dark:shadow-gray-900/20">
+          <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Últimas Transações</h2>
           <div className="space-y-3">
             {recentTransactions.length === 0 ? (
               <p className="text-gray-400">Nenhuma transação recente</p>
@@ -427,8 +427,8 @@ export default function DashboardPage() {
                       {t.type === "income" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{t.description}</p>
-                      <p className="text-xs text-gray-500">{t.category?.name || "Sem categoria"} • {new Date(t.date).toLocaleDateString("pt-BR")}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{t.description}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t.category?.name || "Sem categoria"} • {new Date(t.date).toLocaleDateString("pt-BR")}</p>
                     </div>
                   </div>
                   <p className={`font-semibold ${t.type === "income" ? "text-green-600" : "text-red-600"}`}>

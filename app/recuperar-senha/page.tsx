@@ -35,15 +35,15 @@ export default function RecuperarSenhaPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Recuperar senha</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Recuperar senha</h1>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
             Digite seu email para receber o link de redefinição
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </label>
             <div className="relative mt-1">
