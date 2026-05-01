@@ -125,6 +125,12 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center gap-3">
             <Link
+              href="/plano"
+              className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            >
+              📋 Plano de Ação
+            </Link>
+            <Link
               href="/transactions"
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
             >
