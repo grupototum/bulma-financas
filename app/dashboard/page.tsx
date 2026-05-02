@@ -5,6 +5,7 @@ import { formatCurrency } from "@/lib/format";
 import { ProtectedLayout } from "@/components/layout/protected-layout";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   PieChart,
   Pie,
@@ -13,6 +14,8 @@ import {
   Tooltip,
   BarChart,
   Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -26,6 +29,8 @@ import {
   CreditCard,
   Target,
   PiggyBank,
+  BarChart3,
+  Activity,
 } from "lucide-react";
 
 interface Transaction {
@@ -34,6 +39,7 @@ interface Transaction {
   amount: number;
   type: "expense" | "income";
   date: string;
+  category_id?: string | null;
   category?: { name: string; color: string } | null;
   account_id?: string | null;
 }
@@ -82,6 +88,7 @@ export default function DashboardPage() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [budgetSummary, setBudgetSummary] = useState<BudgetSummary>({ planned: 0, spent: 0 });
   const [loading, setLoading] = useState(true);
+  const [chartType, setChartType] = useState<"bar" | "line">("bar");
   const [period, setPeriod] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
@@ -172,11 +179,38 @@ export default function DashboardPage() {
       if (budget) {
         const { data: bcs } = await supabase
           .from("budget_categories")
-          .select("planned_amount")
+          .select("category_id, planned_amount")
           .eq("budget_id", budget.id);
         const planned = bcs?.reduce((s, bc) => s + (bc.planned_amount || 0), 0) || 0;
         const spent = monthTxs.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0);
         setBudgetSummary({ planned, spent });
+
+        // Alertas de orçamento (80% do limite)
+        const spentByCategory = new Map<string, number>();
+        monthTxs.filter((t) => t.type === "expense").forEach((t) => {
+          if (t.category_id) {
+            spentByCategory.set(t.category_id, (spentByCategory.get(t.category_id) || 0) + t.amount);
+          }
+        });
+
+        const warnings: string[] = [];
+        bcs?.forEach((bc) => {
+          if (bc.planned_amount && bc.planned_amount > 0) {
+            const spentCat = spentByCategory.get(bc.category_id) || 0;
+            const pct = spentCat / bc.planned_amount;
+            if (pct >= 0.8 && pct <= 1) {
+              warnings.push(`${Math.round(pct * 100)}% do orçamento utilizado`);
+            } else if (pct > 1) {
+              warnings.push(`${Math.round(pct * 100)}% do orçamento — limite ultrapassado!`);
+            }
+          }
+        });
+
+        if (warnings.length > 0) {
+          toast.warning(`Orçamento: ${warnings.length} categoria(s) no limite`, {
+            description: warnings.slice(0, 3).join(" • "),
+          });
+        }
       } else {
         setBudgetSummary({ planned: 0, spent: monthTxs.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0) });
       }
@@ -310,18 +344,48 @@ export default function DashboardPage() {
           </div>
 
           <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Evolução mensal</h2>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Evolução mensal</h2>
+              <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <button
+                  onClick={() => setChartType("bar")}
+                  className={`flex items-center gap-1 px-3 py-1 text-xs font-medium ${chartType === "bar" ? "bg-blue-600 text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                >
+                  <BarChart3 className="h-3 w-3" />
+                  Barras
+                </button>
+                <button
+                  onClick={() => setChartType("line")}
+                  className={`flex items-center gap-1 px-3 py-1 text-xs font-medium ${chartType === "line" ? "bg-blue-600 text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                >
+                  <Activity className="h-3 w-3" />
+                  Linhas
+                </button>
+              </div>
+            </div>
             {monthlyData.some((d) => d.income > 0 || d.expense > 0) ? (
               <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="label" />
-                  <YAxis tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                  <Legend />
-                  <Bar dataKey="income" name="Receitas" fill="#22c55e" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="expense" name="Despesas" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                </BarChart>
+                {chartType === "bar" ? (
+                  <BarChart data={monthlyData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" />
+                    <YAxis tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} />
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Legend />
+                    <Bar dataKey="income" name="Receitas" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="expense" name="Despesas" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                ) : (
+                  <LineChart data={monthlyData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" />
+                    <YAxis tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} />
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Legend />
+                    <Line type="monotone" dataKey="income" name="Receitas" stroke="#22c55e" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="expense" name="Despesas" stroke="#ef4444" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                  </LineChart>
+                )}
               </ResponsiveContainer>
             ) : (
               <p className="text-center text-gray-500 dark:text-gray-400 py-12">Nenhum dado disponível</p>

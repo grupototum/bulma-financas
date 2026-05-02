@@ -314,14 +314,16 @@ export default function OrcamentosPage() {
                 const spent = spentByCategory[cat.id] || 0;
                 const pct = planned > 0 ? Math.min(100, Math.round((spent / planned) * 100)) : 0;
                 const overBudget = planned > 0 && spent > planned;
+                const warnBudget = planned > 0 && spent >= planned * 0.8 && spent <= planned;
 
                 return (
-                  <div key={cat.id} className="rounded-lg border border-gray-100 dark:border-gray-800 p-4">
+                  <div key={cat.id} className={`rounded-lg border p-4 ${warnBudget || overBudget ? "border-yellow-200 dark:border-yellow-900/50 bg-yellow-50/30 dark:bg-yellow-900/10" : "border-gray-100 dark:border-gray-800"}`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="h-4 w-4 rounded-full" style={{ backgroundColor: cat.color }} />
                         <span className="font-medium text-gray-900 dark:text-gray-100">{cat.name}</span>
                         {overBudget && <AlertTriangle className="h-4 w-4 text-red-500" />}
+                        {warnBudget && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
@@ -338,7 +340,7 @@ export default function OrcamentosPage() {
                         </div>
                         <div className="text-right">
                           <p className="text-xs text-gray-500 dark:text-gray-400">Gasto</p>
-                          <p className={`text-sm font-semibold ${overBudget ? "text-red-600" : "text-gray-700 dark:text-gray-300"}`}>
+                          <p className={`text-sm font-semibold ${overBudget ? "text-red-600" : warnBudget ? "text-yellow-600" : "text-gray-700 dark:text-gray-300"}`}>
                             {formatCurrency(spent)}
                           </p>
                         </div>
@@ -351,12 +353,12 @@ export default function OrcamentosPage() {
                             className="h-full rounded-full transition-all"
                             style={{
                               width: `${pct}%`,
-                              backgroundColor: overBudget ? "#EF4444" : cat.color,
+                              backgroundColor: overBudget ? "#EF4444" : warnBudget ? "#F59E0B" : cat.color,
                             }}
                           />
                         </div>
                         <p className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400">
-                          {pct}% {overBudget ? "(ultrapassado)" : "utilizado"}
+                          {pct}% {overBudget ? "(ultrapassado)" : warnBudget ? "(quase no limite)" : "utilizado"}
                         </p>
                       </div>
                     )}

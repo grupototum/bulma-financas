@@ -6,7 +6,18 @@ import { ProtectedLayout } from "@/components/layout/protected-layout";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Download, Calendar, Tag, CreditCard } from "lucide-react";
+import { Download, Calendar, Tag, CreditCard, FileText, GitCompare, TrendingUp } from "lucide-react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface Transaction {
   id: string;
@@ -33,7 +44,7 @@ interface AccountReport {
   count: number;
 }
 
-type Tab = "categorias" | "contas";
+type Tab = "categorias" | "contas" | "comparativo" | "fluxo";
 
 export default function RelatoriosPage() {
   const [user, setUser] = useState<any>(null);
@@ -44,6 +55,11 @@ export default function RelatoriosPage() {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   });
   const [activeTab, setActiveTab] = useState<Tab>("categorias");
+  const [comparePeriod, setComparePeriod] = useState(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -113,6 +129,67 @@ export default function RelatoriosPage() {
   const totalIncome = useMemo(() => filteredTransactions.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0), [filteredTransactions]);
   const totalExpense = useMemo(() => filteredTransactions.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0), [filteredTransactions]);
 
+  const compareFilteredTransactions = useMemo(() => {
+    const [year, month] = comparePeriod.split("-").map(Number);
+    const start = `${year}-${String(month).padStart(2, "0")}-01`;
+    const endDate = new Date(year, month, 0);
+    const end = `${year}-${String(month).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
+    return transactions.filter((t) => t.date >= start && t.date <= end);
+  }, [transactions, comparePeriod]);
+
+  const compareTotalIncome = useMemo(() => compareFilteredTransactions.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0), [compareFilteredTransactions]);
+  const compareTotalExpense = useMemo(() => compareFilteredTransactions.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0), [compareFilteredTransactions]);
+
+  const compareCategoryReport = useMemo(() => {
+    const map = new Map<string, CategoryReport>();
+    compareFilteredTransactions.filter((t) => t.type === "expense").forEach((t) => {
+      const name = t.category?.name || "Sem categoria";
+      const color = t.category?.color || "#9CA3AF";
+      const existing = map.get(name);
+      if (existing) {
+        existing.total += t.amount;
+        existing.count += 1;
+      } else {
+        map.set(name, { name, color, total: t.amount, count: 1 });
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => b.total - a.total);
+  }, [compareFilteredTransactions]);
+
+  interface CashFlowData {
+    label: string;
+    income: number;
+    expense: number;
+    balance: number;
+    cumulative: number;
+  }
+
+  const cashFlowData = useMemo<CashFlowData[]>(() => {
+    const [cy, cm] = period.split("-").map(Number);
+    const data: CashFlowData[] = [];
+    let cumulative = 0;
+
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(cy, cm - 1 - i, 1);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const label = `${String(m).padStart(2, "0")}/${y}`;
+      const start = `${y}-${String(m).padStart(2, "0")}-01`;
+      const endDate = new Date(y, m, 0);
+      const end = `${y}-${String(m).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
+
+      const monthTxs = transactions.filter((t) => t.date >= start && t.date <= end);
+      const income = monthTxs.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0);
+      const expense = monthTxs.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0);
+      const balance = income - expense;
+      cumulative += balance;
+
+      data.push({ label, income, expense, balance, cumulative });
+    }
+
+    return data;
+  }, [transactions, period]);
+
   function exportCSV() {
     const headers = ["Data", "Descrição", "Tipo", "Categoria", "Conta", "Valor"];
     const rows = filteredTransactions.map((t) => [
@@ -134,6 +211,78 @@ export default function RelatoriosPage() {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     toast.success("CSV exportado!");
+  }
+
+  function exportPDF() {
+    const doc = new jsPDF();
+    const [year, month] = period.split("-").map(Number);
+    const monthLabel = `${String(month).padStart(2, "0")}/${year}`;
+
+    // Título
+    doc.setFontSize(18);
+    doc.text("Relatório Bulma Finanças", 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Período: ${monthLabel}`, 14, 28);
+
+    // Resumo
+    doc.setFontSize(11);
+    doc.setTextColor(34, 197, 94);
+    doc.text(`Receitas: ${formatCurrency(totalIncome)}`, 14, 38);
+    doc.setTextColor(239, 68, 68);
+    doc.text(`Despesas: ${formatCurrency(totalExpense)}`, 80, 38);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Saldo: ${formatCurrency(totalIncome - totalExpense)}`, 146, 38);
+
+    let startY = 48;
+
+    if (activeTab === "categorias" && categoryReport.length > 0) {
+      autoTable(doc, {
+        startY,
+        head: [["Categoria", "Transações", "Total"]],
+        body: categoryReport.map((c) => [c.name, c.count.toString(), formatCurrency(c.total)]),
+        theme: "striped",
+        headStyles: { fillColor: [59, 130, 246] },
+      });
+      startY = (doc as any).lastAutoTable?.finalY || startY + 20;
+    }
+
+    if (activeTab === "contas" && accountReport.length > 0) {
+      autoTable(doc, {
+        startY,
+        head: [["Conta", "Transações", "Receitas", "Despesas"]],
+        body: accountReport.map((a) => [
+          a.name,
+          a.count.toString(),
+          formatCurrency(a.income),
+          formatCurrency(a.expense),
+        ]),
+        theme: "striped",
+        headStyles: { fillColor: [59, 130, 246] },
+      });
+      startY = (doc as any).lastAutoTable?.finalY || startY + 20;
+    }
+
+    // Transações detalhadas
+    if (filteredTransactions.length > 0) {
+      autoTable(doc, {
+        startY: startY + 4,
+        head: [["Data", "Descrição", "Tipo", "Categoria", "Conta", "Valor"]],
+        body: filteredTransactions.map((t) => [
+          t.date,
+          t.description,
+          t.type === "income" ? "Receita" : "Despesa",
+          t.category?.name || "",
+          t.account?.name || "",
+          formatCurrency(t.amount),
+        ]),
+        theme: "grid",
+        headStyles: { fillColor: [75, 85, 99] },
+        styles: { fontSize: 9 },
+      });
+    }
+
+    doc.save(`relatorio-${period}.pdf`);
+    toast.success("PDF exportado!");
   }
 
   if (loading) {
@@ -166,6 +315,13 @@ export default function RelatoriosPage() {
             >
               <Download className="h-4 w-4" />
               Exportar CSV
+            </button>
+            <button
+              onClick={exportPDF}
+              className="flex items-center gap-2 rounded-lg border border-red-300 dark:border-red-800 px-4 py-2 text-sm font-medium text-red-700 dark:text-red-400 hover:bg-red-50 dark:bg-red-900/20"
+            >
+              <FileText className="h-4 w-4" />
+              Exportar PDF
             </button>
           </div>
         </div>
@@ -212,10 +368,32 @@ export default function RelatoriosPage() {
             <CreditCard className="h-4 w-4" />
             Por Conta
           </button>
+          <button
+            onClick={() => setActiveTab("comparativo")}
+            className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
+              activeTab === "comparativo"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
+            }`}
+          >
+            <GitCompare className="h-4 w-4" />
+            Comparativo
+          </button>
+          <button
+            onClick={() => setActiveTab("fluxo")}
+            className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
+              activeTab === "fluxo"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
+            }`}
+          >
+            <TrendingUp className="h-4 w-4" />
+            Fluxo de Caixa
+          </button>
         </div>
 
         {/* Conteúdo */}
-        {activeTab === "categorias" ? (
+        {activeTab === "categorias" && (
           <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
             {categoryReport.length === 0 ? (
               <div className="p-8 text-center text-gray-400 dark:text-gray-500">
@@ -239,7 +417,8 @@ export default function RelatoriosPage() {
               </div>
             )}
           </div>
-        ) : (
+        )}
+        {activeTab === "contas" && (
           <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
             {accountReport.length === 0 ? (
               <div className="p-8 text-center text-gray-400 dark:text-gray-500">
@@ -262,6 +441,164 @@ export default function RelatoriosPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+        {activeTab === "comparativo" && (
+          <div className="space-y-6">
+            {/* Seletor do mês de comparação */}
+            <div className="flex items-center gap-2">
+              <GitCompare className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <span className="text-sm text-gray-600 dark:text-gray-300">Comparar com:</span>
+              <input
+                type="month"
+                value={comparePeriod}
+                onChange={(e) => setComparePeriod(e.target.value)}
+                className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+
+            {/* Cards comparativos */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Receitas</p>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-lg font-bold text-green-600">{formatCurrency(totalIncome)}</p>
+                    <p className="text-xs text-gray-400">{period}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">{formatCurrency(compareTotalIncome)}</p>
+                    <p className="text-xs text-gray-400">{comparePeriod}</p>
+                  </div>
+                </div>
+                <p className={`mt-2 text-xs font-medium ${compareTotalIncome > 0 ? ((totalIncome - compareTotalIncome) / compareTotalIncome >= 0 ? "text-green-600" : "text-red-600") : "text-gray-500"}`}>
+                  {compareTotalIncome > 0 ? `${((totalIncome - compareTotalIncome) / compareTotalIncome * 100).toFixed(1)}%` : "—"}
+                </p>
+              </div>
+              <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Despesas</p>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-lg font-bold text-red-600">{formatCurrency(totalExpense)}</p>
+                    <p className="text-xs text-gray-400">{period}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">{formatCurrency(compareTotalExpense)}</p>
+                    <p className="text-xs text-gray-400">{comparePeriod}</p>
+                  </div>
+                </div>
+                <p className={`mt-2 text-xs font-medium ${compareTotalExpense > 0 ? ((totalExpense - compareTotalExpense) / compareTotalExpense >= 0 ? "text-red-600" : "text-green-600") : "text-gray-500"}`}>
+                  {compareTotalExpense > 0 ? `${((totalExpense - compareTotalExpense) / compareTotalExpense * 100).toFixed(1)}%` : "—"}
+                </p>
+              </div>
+              <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Saldo</p>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-lg font-bold text-blue-600">{formatCurrency(totalIncome - totalExpense)}</p>
+                    <p className="text-xs text-gray-400">{period}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">{formatCurrency(compareTotalIncome - compareTotalExpense)}</p>
+                    <p className="text-xs text-gray-400">{comparePeriod}</p>
+                  </div>
+                </div>
+                <p className={`mt-2 text-xs font-medium ${(compareTotalIncome - compareTotalExpense) !== 0 ? ((totalIncome - totalExpense) - (compareTotalIncome - compareTotalExpense)) / (compareTotalIncome - compareTotalExpense) >= 0 ? "text-green-600" : "text-red-600" : "text-gray-500"}`}>
+                  {(compareTotalIncome - compareTotalExpense) !== 0 ? `${(((totalIncome - totalExpense) - (compareTotalIncome - compareTotalExpense)) / (compareTotalIncome - compareTotalExpense) * 100).toFixed(1)}%` : "—"}
+                </p>
+              </div>
+            </div>
+
+            {/* Top categorias comparativo */}
+            <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Top categorias</h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{period}</p>
+                  {categoryReport.slice(0, 5).map((cat) => (
+                    <div key={cat.name} className="flex items-center justify-between py-2">
+                      <div className="flex items-center gap-2">
+                        <div className="h-3 w-3 rounded-full" style={{ backgroundColor: cat.color }} />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{cat.name}</span>
+                      </div>
+                      <span className="text-sm font-medium text-red-600">{formatCurrency(cat.total)}</span>
+                    </div>
+                  ))}
+                  {categoryReport.length === 0 && <p className="text-sm text-gray-400">Nenhuma despesa</p>}
+                </div>
+                <div>
+                  <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{comparePeriod}</p>
+                  {compareCategoryReport.slice(0, 5).map((cat) => (
+                    <div key={cat.name} className="flex items-center justify-between py-2">
+                      <div className="flex items-center gap-2">
+                        <div className="h-3 w-3 rounded-full" style={{ backgroundColor: cat.color }} />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{cat.name}</span>
+                      </div>
+                      <span className="text-sm font-medium text-red-600">{formatCurrency(cat.total)}</span>
+                    </div>
+                  ))}
+                  {compareCategoryReport.length === 0 && <p className="text-sm text-gray-400">Nenhuma despesa</p>}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === "fluxo" && (
+          <div className="space-y-6">
+            {/* Gráfico de fluxo de caixa */}
+            <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Saldo acumulado (últimos 12 meses)</h3>
+              {cashFlowData.some((d) => d.income > 0 || d.expense > 0) ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={cashFlowData}>
+                    <defs>
+                      <linearGradient id="colorCumulative" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" />
+                    <YAxis tickFormatter={(v) => `R$${(v / 1000).toFixed(0)}k`} />
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Area type="monotone" dataKey="cumulative" name="Saldo acumulado" stroke="#3B82F6" fillOpacity={1} fill="url(#colorCumulative)" strokeWidth={2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-center text-gray-500 dark:text-gray-400 py-12">Nenhum dado disponível</p>
+              )}
+            </div>
+
+            {/* Tabela de fluxo de caixa */}
+            <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 dark:bg-gray-700/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">Mês</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Receitas</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Despesas</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Saldo do mês</th>
+                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Saldo acumulado</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                    {cashFlowData.map((row) => (
+                      <tr key={row.label} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{row.label}</td>
+                        <td className="px-4 py-3 text-right text-green-600">{formatCurrency(row.income)}</td>
+                        <td className="px-4 py-3 text-right text-red-600">{formatCurrency(row.expense)}</td>
+                        <td className={`px-4 py-3 text-right font-medium ${row.balance >= 0 ? "text-green-600" : "text-red-600"}`}>{formatCurrency(row.balance)}</td>
+                        <td className={`px-4 py-3 text-right font-medium ${row.cumulative >= 0 ? "text-blue-600" : "text-red-600"}`}>{formatCurrency(row.cumulative)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {cashFlowData.length === 0 && (
+                <p className="p-8 text-center text-gray-400 dark:text-gray-500">Nenhum dado disponível</p>
+              )}
+            </div>
           </div>
         )}
       </div>

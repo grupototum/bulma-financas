@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/lib/theme-provider";
+import { AutoRecurringChecker } from "@/components/auto-recurring-checker";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -175,6 +176,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
         )}
 
         <main className="flex-1 overflow-auto">{children}</main>
+        <AutoRecurringChecker />
 
         {/* Footer */}
         <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 text-center text-xs text-gray-400 dark:text-gray-500">
