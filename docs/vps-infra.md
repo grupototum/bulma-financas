@@ -29,6 +29,17 @@
 
 O Nginx principal roda como servico do host e publica `80` e `443`. As portas dos containers ficam presas em loopback e sao acessadas pelo reverse proxy local.
 
+## Dominios e Proxy
+
+| Dominio | Destino no origin | Status validado |
+|---------|-------------------|-----------------|
+| `upixel.app` | `/var/www/upixelcrm/dist` | `200` |
+| `n8n.grupototum.com` | `127.0.0.1:5678` | `200` |
+| `evolution.grupototum.com` | `127.0.0.1:47398` | `200` |
+| `painel.grupototum.com` | `https://127.0.0.1:8083` | `302 /login/` |
+
+Os proxies de `n8n`, `evolution` e `painel` ficam em `/etc/nginx/conf.d/domains/totum-app-proxies.conf`, separado dos arquivos gerados pelo Hestia.
+
 ## Backups
 
 - Postgres: todo dia `03:17` em `/root/totum-ops/backups/postgres/`
@@ -51,6 +62,17 @@ O Nginx principal roda como servico do host e publica `80` e `443`. As portas do
 - UFW ativo com entrada liberada apenas para `22/tcp`, `80/tcp` e `443/tcp`
 - Portas internas Docker bloqueadas explicitamente no UFW: `3000`, `47398`, `5678`, `6379`, `5432`, `11435`
 - Rotacao de logs Docker configurada em `/etc/docker/daemon.json`
+- Rotacao de logs Docker aplicada apos restart controlado do Docker
+- Fonte APT duplicada do Docker removida; o arquivo ativo e `/etc/apt/sources.list.d/docker.sources`
+- O PPA `ondrej/php` permanece ativo porque o PHP 8.3 instalado veio dele
+
+## SSL e Cloudflare
+
+- `certbot renew --dry-run` passou para `code.grupototum.com`
+- `certbot.timer` esta ativo
+- `upixel.app`, `n8n.grupototum.com`, `evolution.grupototum.com` e `painel.grupototum.com` passam pela Cloudflare
+- No painel Cloudflare, validar que o modo SSL esteja em `Full` ou `Full strict`
+- Para `Full strict`, instalar/usar Origin Certificate que cubra todos os hosts proxied, incluindo `*.grupototum.com` e `upixel.app`
 
 ## Monitoramento
 
@@ -80,6 +102,7 @@ certbot renew --dry-run
 | `/docker/compose/docker-compose.yml` | Stack Docker da Totum |
 | `/docker/compose/docker-compose.override.yml` | Overrides de seguranca/healthcheck |
 | `/docker/compose/nginx.conf` | Config do reverse proxy do stack |
+| `/etc/nginx/conf.d/domains/totum-app-proxies.conf` | Proxies publicos para n8n, Evolution e painel |
 | `/root/totum-ops/healthcheck.sh` | Healthcheck periodico |
 | `/root/totum-ops/alert.sh` | Alerta via Evolution API |
 | `/root/totum-ops/alert.env` | Segredos e destino do alerta |
