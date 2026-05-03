@@ -17,6 +17,7 @@ import {
   X,
   Sun,
   Moon,
+  Repeat,
 } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/lib/theme-provider";
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
   { href: "/categories", label: "Categorias", icon: Tags },
   { href: "/contas", label: "Contas", icon: Landmark },
+  { href: "/fixed-expenses", label: "Fixos vs Variáveis", icon: Repeat },
   { href: "/metas", label: "Metas", icon: Target },
   { href: "/orcamentos", label: "Orçamentos", icon: Wallet },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3 },

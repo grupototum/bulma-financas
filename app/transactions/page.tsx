@@ -32,6 +32,7 @@ interface Transaction {
   date: string;
   category_id: string | null;
   account_id: string | null;
+  is_fixed: boolean;
   is_recurring: boolean;
   recurring_interval: string | null;
   category?: { name: string; color: string } | null;
@@ -197,11 +198,15 @@ export default function TransactionsPage() {
     const supabase = createClient();
 
     let finalCategoryId = categoryId;
+    let finalIsFixed = false;
     if (!finalCategoryId && categories.length > 0 && !editingId) {
       const categoryMap = new Map<string, string>();
       categories.forEach((c) => categoryMap.set(c.name, c.id));
       const autoResult = autoCategorize(description, categoryMap);
-      if (autoResult) finalCategoryId = autoResult.categoryId;
+      if (autoResult) {
+        finalCategoryId = autoResult.categoryId;
+        finalIsFixed = autoResult.isFixed;
+      }
     }
 
     const payload = {
@@ -212,6 +217,7 @@ export default function TransactionsPage() {
       category_id: finalCategoryId || null,
       account_id: accountId || null,
       date,
+      is_fixed: finalIsFixed,
       is_recurring: isRecurring,
       recurring_interval: isRecurring ? recurringInterval : null,
     };
@@ -335,6 +341,11 @@ export default function TransactionsPage() {
         typeVal = "income";
       }
 
+      // Auto-categorizar importação
+      const categoryMap = new Map<string, string>();
+      categories.forEach((c) => categoryMap.set(c.name, c.id));
+      const autoResult = autoCategorize(descVal, categoryMap);
+
       toInsert.push({
         user_id: user.id,
         description: descVal,
@@ -342,6 +353,8 @@ export default function TransactionsPage() {
         type: typeVal,
         date: dateVal,
         account_id: importAccountId || null,
+        category_id: autoResult?.categoryId || null,
+        is_fixed: autoResult?.isFixed || false,
       });
     }
 
@@ -378,6 +391,7 @@ export default function TransactionsPage() {
       category_id: tx.category_id,
       account_id: tx.account_id,
       date: nextDate,
+      is_fixed: tx.is_fixed || false,
       is_recurring: false,
       recurring_interval: null,
     });

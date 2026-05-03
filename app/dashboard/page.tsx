@@ -31,6 +31,7 @@ import {
   PiggyBank,
   BarChart3,
   Activity,
+  Repeat,
 } from "lucide-react";
 
 interface Transaction {
@@ -39,6 +40,7 @@ interface Transaction {
   amount: number;
   type: "expense" | "income";
   date: string;
+  is_fixed?: boolean;
   category_id?: string | null;
   category?: { name: string; color: string } | null;
   account_id?: string | null;
@@ -125,7 +127,7 @@ export default function DashboardPage() {
 
       const { data: txs } = await supabase
         .from("transactions")
-        .select("*, category:categories(name, color)")
+        .select("*, category:categories(name, color), is_fixed")
         .eq("user_id", user.id)
         .gte("date", startDate.toISOString().split("T")[0])
         .order("date", { ascending: false });
@@ -240,6 +242,17 @@ export default function DashboardPage() {
     return transactions.slice(0, 5);
   }, [transactions]);
 
+  const fixedVariableSummary = useMemo(() => {
+    const [year, month] = period.split("-").map(Number);
+    const startOfMonth = `${year}-${String(month).padStart(2, "0")}-01`;
+    const endOfMonthDate = new Date(year, month, 0);
+    const endOfMonth = `${year}-${String(month).padStart(2, "0")}-${String(endOfMonthDate.getDate()).padStart(2, "0")}`;
+    const monthTxs = transactions.filter((t) => t.date >= startOfMonth && t.date <= endOfMonth);
+    const fixed = monthTxs.filter((t) => t.type === "expense" && t.is_fixed).reduce((s, t) => s + t.amount, 0);
+    const variable = monthTxs.filter((t) => t.type === "expense" && !t.is_fixed).reduce((s, t) => s + t.amount, 0);
+    return { fixed, variable };
+  }, [transactions, period]);
+
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -265,7 +278,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Cards resumo */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="flex items-center justify-between">
               <div>
@@ -296,6 +309,28 @@ export default function DashboardPage() {
               </div>
               <div className="rounded-lg bg-mint-error-light dark:bg-mint-error/30 p-3">
                 <TrendingDown className="h-6 w-6 text-mint-error" />
+              </div>
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-mint-500 dark:text-mint-400">Gastos Fixos</p>
+                <p className="mt-1 text-2xl font-bold text-mint-soft-blue">{formatCurrency(fixedVariableSummary.fixed)}</p>
+              </div>
+              <div className="rounded-lg bg-mint-soft-blue-light dark:bg-mint-soft-blue/30 p-3">
+                <Repeat className="h-6 w-6 text-mint-soft-blue" />
+              </div>
+            </div>
+          </div>
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-mint-500 dark:text-mint-400">Gastos Variáveis</p>
+                <p className="mt-1 text-2xl font-bold text-mint-amber">{formatCurrency(fixedVariableSummary.variable)}</p>
+              </div>
+              <div className="rounded-lg bg-mint-amber-light dark:bg-mint-amber/20 p-3">
+                <TrendingDown className="h-6 w-6 text-mint-amber" />
               </div>
             </div>
           </div>
