@@ -68,40 +68,40 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="text-3xl font-bold text-mint-900 dark:text-mint-50">
           {isSignUp ? "Criar conta" : "Entrar"}
         </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Bulma Finanças</p>
+        <p className="mt-2 text-mint-600 dark:text-mint-400">Bulma Finanças</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">
             Email
           </label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-4 py-2 focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-4 py-2 focus:border-mint-brand focus:outline-none"
           />
           {fieldErrors.email && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+            <p className="mt-1 text-xs text-mint-error">{fieldErrors.email}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">
             Senha
           </label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-4 py-2 focus:border-blue-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-4 py-2 focus:border-mint-brand focus:outline-none"
           />
           {fieldErrors.password && (
-            <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
+            <p className="mt-1 text-xs text-mint-error">{fieldErrors.password}</p>
           )}
         </div>
 
@@ -109,8 +109,8 @@ export function LoginForm() {
           <div
             className={`rounded-lg p-3 text-sm ${
               message.includes("Verifique") || message.includes("sucesso")
-                ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+                ? "bg-mint-brand-light dark:bg-mint-brand-deep/30 text-green-800 dark:text-green-300"
+                : "bg-mint-error-light dark:bg-mint-error/30 text-red-800 dark:text-red-300"
             }`}
           >
             {message}
@@ -120,7 +120,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          className="w-full rounded-full bg-mint-900 px-4 py-2 font-medium text-white hover:bg-mint-800 disabled:opacity-50"
         >
           {loading ? "Carregando..." : isSignUp ? "Cadastrar" : "Entrar"}
         </button>
@@ -130,7 +130,7 @@ export function LoginForm() {
         <div className="text-center">
           <Link
             href="/recuperar-senha"
-            className="text-sm text-blue-600 hover:underline"
+            className="text-sm text-mint-brand hover:underline"
           >
             Esqueci minha senha
           </Link>
@@ -144,7 +144,7 @@ export function LoginForm() {
             setMessage("");
             setFieldErrors({});
           }}
-          className="text-sm text-blue-600 hover:underline"
+          className="text-sm text-mint-brand hover:underline"
         >
           {isSignUp ? "Já tem conta? Entrar" : "Não tem conta? Cadastrar"}
         </button>

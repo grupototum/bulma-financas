@@ -298,20 +298,20 @@ export default function RelatoriosPage() {
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Relatórios</h1>
+          <h1 className="text-2xl font-bold text-mint-900 dark:text-mint-50">Relatórios</h1>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <Calendar className="h-4 w-4 text-mint-500 dark:text-mint-400" />
               <input
                 type="month"
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
-                className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
               />
             </div>
             <button
               onClick={exportCSV}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+              className="flex items-center gap-2 rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm font-medium text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
             >
               <Download className="h-4 w-4" />
               Exportar CSV
@@ -328,30 +328,30 @@ export default function RelatoriosPage() {
 
         {/* Resumo */}
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Receitas</p>
-            <p className="text-xl font-bold text-green-600">{formatCurrency(totalIncome)}</p>
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
+            <p className="text-sm text-mint-500 dark:text-mint-400">Receitas</p>
+            <p className="text-xl font-bold text-mint-brand-deep">{formatCurrency(totalIncome)}</p>
           </div>
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Despesas</p>
-            <p className="text-xl font-bold text-red-600">{formatCurrency(totalExpense)}</p>
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
+            <p className="text-sm text-mint-500 dark:text-mint-400">Despesas</p>
+            <p className="text-xl font-bold text-mint-error">{formatCurrency(totalExpense)}</p>
           </div>
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
-            <p className={`text-xl font-bold ${totalIncome - totalExpense >= 0 ? "text-blue-600" : "text-red-600"}`}>
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
+            <p className="text-sm text-mint-500 dark:text-mint-400">Saldo</p>
+            <p className={`text-xl font-bold ${totalIncome - totalExpense >= 0 ? "text-mint-brand" : "text-mint-error"}`}>
               {formatCurrency(totalIncome - totalExpense)}
             </p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-gray-200 dark:border-gray-700">
+        <div className="mb-6 flex gap-2 border-b border-mint-200 dark:border-mint-800">
           <button
             onClick={() => setActiveTab("categorias")}
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "categorias"
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
+                ? "border-blue-600 text-mint-brand"
+                : "border-transparent text-mint-500 hover:text-mint-700 dark:text-mint-300 dark:hover:text-gray-100"
             }`}
           >
             <Tag className="h-4 w-4" />
@@ -361,8 +361,8 @@ export default function RelatoriosPage() {
             onClick={() => setActiveTab("contas")}
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "contas"
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
+                ? "border-blue-600 text-mint-brand"
+                : "border-transparent text-mint-500 hover:text-mint-700 dark:text-mint-300 dark:hover:text-gray-100"
             }`}
           >
             <CreditCard className="h-4 w-4" />
@@ -372,8 +372,8 @@ export default function RelatoriosPage() {
             onClick={() => setActiveTab("comparativo")}
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "comparativo"
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
+                ? "border-blue-600 text-mint-brand"
+                : "border-transparent text-mint-500 hover:text-mint-700 dark:text-mint-300 dark:hover:text-gray-100"
             }`}
           >
             <GitCompare className="h-4 w-4" />
@@ -383,8 +383,8 @@ export default function RelatoriosPage() {
             onClick={() => setActiveTab("fluxo")}
             className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium ${
               activeTab === "fluxo"
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
+                ? "border-blue-600 text-mint-brand"
+                : "border-transparent text-mint-500 hover:text-mint-700 dark:text-mint-300 dark:hover:text-gray-100"
             }`}
           >
             <TrendingUp className="h-4 w-4" />
@@ -394,10 +394,10 @@ export default function RelatoriosPage() {
 
         {/* Conteúdo */}
         {activeTab === "categorias" && (
-          <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 shadow-mint">
             {categoryReport.length === 0 ? (
-              <div className="p-8 text-center text-gray-400 dark:text-gray-500">
-                <Tag className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+              <div className="p-8 text-center text-mint-400 dark:text-mint-500">
+                <Tag className="mx-auto mb-3 h-10 w-10 text-mint-300 dark:text-gray-600" />
                 <p>Nenhuma despesa no período selecionado</p>
               </div>
             ) : (
@@ -407,11 +407,11 @@ export default function RelatoriosPage() {
                     <div className="flex items-center gap-3">
                       <div className="h-4 w-4 rounded-full" style={{ backgroundColor: cat.color }} />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-gray-100">{cat.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{cat.count} transação{cat.count !== 1 ? "es" : ""}</p>
+                        <p className="font-medium text-mint-900 dark:text-mint-50">{cat.name}</p>
+                        <p className="text-xs text-mint-500 dark:text-mint-400">{cat.count} transação{cat.count !== 1 ? "es" : ""}</p>
                       </div>
                     </div>
-                    <p className="font-semibold text-red-600">{formatCurrency(cat.total)}</p>
+                    <p className="font-semibold text-mint-error">{formatCurrency(cat.total)}</p>
                   </div>
                 ))}
               </div>
@@ -419,10 +419,10 @@ export default function RelatoriosPage() {
           </div>
         )}
         {activeTab === "contas" && (
-          <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 shadow-mint">
             {accountReport.length === 0 ? (
-              <div className="p-8 text-center text-gray-400 dark:text-gray-500">
-                <CreditCard className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+              <div className="p-8 text-center text-mint-400 dark:text-mint-500">
+                <CreditCard className="mx-auto mb-3 h-10 w-10 text-mint-300 dark:text-gray-600" />
                 <p>Nenhuma transação no período selecionado</p>
               </div>
             ) : (
@@ -430,12 +430,12 @@ export default function RelatoriosPage() {
                 {accountReport.map((acc) => (
                   <div key={acc.name} className="flex items-center justify-between p-4">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">{acc.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{acc.count} transação{acc.count !== 1 ? "es" : ""}</p>
+                      <p className="font-medium text-mint-900 dark:text-mint-50">{acc.name}</p>
+                      <p className="text-xs text-mint-500 dark:text-mint-400">{acc.count} transação{acc.count !== 1 ? "es" : ""}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold text-green-600">+{formatCurrency(acc.income)}</p>
-                      <p className="text-sm font-semibold text-red-600">-{formatCurrency(acc.expense)}</p>
+                      <p className="text-sm font-semibold text-mint-brand-deep">+{formatCurrency(acc.income)}</p>
+                      <p className="text-sm font-semibold text-mint-error">-{formatCurrency(acc.expense)}</p>
                     </div>
                   </div>
                 ))}
@@ -447,94 +447,94 @@ export default function RelatoriosPage() {
           <div className="space-y-6">
             {/* Seletor do mês de comparação */}
             <div className="flex items-center gap-2">
-              <GitCompare className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-sm text-gray-600 dark:text-gray-300">Comparar com:</span>
+              <GitCompare className="h-4 w-4 text-mint-500 dark:text-mint-400" />
+              <span className="text-sm text-mint-600 dark:text-mint-300">Comparar com:</span>
               <input
                 type="month"
                 value={comparePeriod}
                 onChange={(e) => setComparePeriod(e.target.value)}
-                className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
               />
             </div>
 
             {/* Cards comparativos */}
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Receitas</p>
+              <div className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
+                <p className="text-xs text-mint-500 dark:text-mint-400 mb-2">Receitas</p>
                 <div className="flex items-end justify-between">
                   <div>
-                    <p className="text-lg font-bold text-green-600">{formatCurrency(totalIncome)}</p>
+                    <p className="text-lg font-bold text-mint-brand-deep">{formatCurrency(totalIncome)}</p>
                     <p className="text-xs text-gray-400">{period}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">{formatCurrency(compareTotalIncome)}</p>
+                    <p className="text-lg font-bold text-mint-700 dark:text-mint-300">{formatCurrency(compareTotalIncome)}</p>
                     <p className="text-xs text-gray-400">{comparePeriod}</p>
                   </div>
                 </div>
-                <p className={`mt-2 text-xs font-medium ${compareTotalIncome > 0 ? ((totalIncome - compareTotalIncome) / compareTotalIncome >= 0 ? "text-green-600" : "text-red-600") : "text-gray-500"}`}>
+                <p className={`mt-2 text-xs font-medium ${compareTotalIncome > 0 ? ((totalIncome - compareTotalIncome) / compareTotalIncome >= 0 ? "text-mint-brand-deep" : "text-mint-error") : "text-gray-500"}`}>
                   {compareTotalIncome > 0 ? `${((totalIncome - compareTotalIncome) / compareTotalIncome * 100).toFixed(1)}%` : "—"}
                 </p>
               </div>
-              <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Despesas</p>
+              <div className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
+                <p className="text-xs text-mint-500 dark:text-mint-400 mb-2">Despesas</p>
                 <div className="flex items-end justify-between">
                   <div>
-                    <p className="text-lg font-bold text-red-600">{formatCurrency(totalExpense)}</p>
+                    <p className="text-lg font-bold text-mint-error">{formatCurrency(totalExpense)}</p>
                     <p className="text-xs text-gray-400">{period}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">{formatCurrency(compareTotalExpense)}</p>
+                    <p className="text-lg font-bold text-mint-700 dark:text-mint-300">{formatCurrency(compareTotalExpense)}</p>
                     <p className="text-xs text-gray-400">{comparePeriod}</p>
                   </div>
                 </div>
-                <p className={`mt-2 text-xs font-medium ${compareTotalExpense > 0 ? ((totalExpense - compareTotalExpense) / compareTotalExpense >= 0 ? "text-red-600" : "text-green-600") : "text-gray-500"}`}>
+                <p className={`mt-2 text-xs font-medium ${compareTotalExpense > 0 ? ((totalExpense - compareTotalExpense) / compareTotalExpense >= 0 ? "text-mint-error" : "text-mint-brand-deep") : "text-gray-500"}`}>
                   {compareTotalExpense > 0 ? `${((totalExpense - compareTotalExpense) / compareTotalExpense * 100).toFixed(1)}%` : "—"}
                 </p>
               </div>
-              <div className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Saldo</p>
+              <div className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
+                <p className="text-xs text-mint-500 dark:text-mint-400 mb-2">Saldo</p>
                 <div className="flex items-end justify-between">
                   <div>
-                    <p className="text-lg font-bold text-blue-600">{formatCurrency(totalIncome - totalExpense)}</p>
+                    <p className="text-lg font-bold text-mint-brand">{formatCurrency(totalIncome - totalExpense)}</p>
                     <p className="text-xs text-gray-400">{period}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-gray-700 dark:text-gray-300">{formatCurrency(compareTotalIncome - compareTotalExpense)}</p>
+                    <p className="text-lg font-bold text-mint-700 dark:text-mint-300">{formatCurrency(compareTotalIncome - compareTotalExpense)}</p>
                     <p className="text-xs text-gray-400">{comparePeriod}</p>
                   </div>
                 </div>
-                <p className={`mt-2 text-xs font-medium ${(compareTotalIncome - compareTotalExpense) !== 0 ? ((totalIncome - totalExpense) - (compareTotalIncome - compareTotalExpense)) / (compareTotalIncome - compareTotalExpense) >= 0 ? "text-green-600" : "text-red-600" : "text-gray-500"}`}>
+                <p className={`mt-2 text-xs font-medium ${(compareTotalIncome - compareTotalExpense) !== 0 ? ((totalIncome - totalExpense) - (compareTotalIncome - compareTotalExpense)) / (compareTotalIncome - compareTotalExpense) >= 0 ? "text-mint-brand-deep" : "text-mint-error" : "text-gray-500"}`}>
                   {(compareTotalIncome - compareTotalExpense) !== 0 ? `${(((totalIncome - totalExpense) - (compareTotalIncome - compareTotalExpense)) / (compareTotalIncome - compareTotalExpense) * 100).toFixed(1)}%` : "—"}
                 </p>
               </div>
             </div>
 
             {/* Top categorias comparativo */}
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Top categorias</h3>
+            <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
+              <h3 className="mb-4 text-lg font-semibold text-mint-900 dark:text-mint-50">Top categorias</h3>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{period}</p>
+                  <p className="mb-2 text-sm font-medium text-mint-500 dark:text-mint-400">{period}</p>
                   {categoryReport.slice(0, 5).map((cat) => (
                     <div key={cat.name} className="flex items-center justify-between py-2">
                       <div className="flex items-center gap-2">
                         <div className="h-3 w-3 rounded-full" style={{ backgroundColor: cat.color }} />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">{cat.name}</span>
+                        <span className="text-sm text-mint-700 dark:text-mint-300">{cat.name}</span>
                       </div>
-                      <span className="text-sm font-medium text-red-600">{formatCurrency(cat.total)}</span>
+                      <span className="text-sm font-medium text-mint-error">{formatCurrency(cat.total)}</span>
                     </div>
                   ))}
                   {categoryReport.length === 0 && <p className="text-sm text-gray-400">Nenhuma despesa</p>}
                 </div>
                 <div>
-                  <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{comparePeriod}</p>
+                  <p className="mb-2 text-sm font-medium text-mint-500 dark:text-mint-400">{comparePeriod}</p>
                   {compareCategoryReport.slice(0, 5).map((cat) => (
                     <div key={cat.name} className="flex items-center justify-between py-2">
                       <div className="flex items-center gap-2">
                         <div className="h-3 w-3 rounded-full" style={{ backgroundColor: cat.color }} />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">{cat.name}</span>
+                        <span className="text-sm text-mint-700 dark:text-mint-300">{cat.name}</span>
                       </div>
-                      <span className="text-sm font-medium text-red-600">{formatCurrency(cat.total)}</span>
+                      <span className="text-sm font-medium text-mint-error">{formatCurrency(cat.total)}</span>
                     </div>
                   ))}
                   {compareCategoryReport.length === 0 && <p className="text-sm text-gray-400">Nenhuma despesa</p>}
@@ -546,8 +546,8 @@ export default function RelatoriosPage() {
         {activeTab === "fluxo" && (
           <div className="space-y-6">
             {/* Gráfico de fluxo de caixa */}
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Saldo acumulado (últimos 12 meses)</h3>
+            <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
+              <h3 className="mb-4 text-lg font-semibold text-mint-900 dark:text-mint-50">Saldo acumulado (últimos 12 meses)</h3>
               {cashFlowData.some((d) => d.income > 0 || d.expense > 0) ? (
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={cashFlowData}>
@@ -565,38 +565,38 @@ export default function RelatoriosPage() {
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-12">Nenhum dado disponível</p>
+                <p className="text-center text-mint-500 dark:text-mint-400 py-12">Nenhum dado disponível</p>
               )}
             </div>
 
             {/* Tabela de fluxo de caixa */}
-            <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20 overflow-hidden">
+            <div className="rounded-2xl bg-white dark:bg-mint-800 shadow-mint overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 dark:bg-gray-700/50">
+                  <thead className="bg-mint-50 dark:bg-mint-800/50">
                     <tr>
-                      <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400">Mês</th>
-                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Receitas</th>
-                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Despesas</th>
-                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Saldo do mês</th>
-                      <th className="px-4 py-3 text-right font-medium text-gray-500 dark:text-gray-400">Saldo acumulado</th>
+                      <th className="px-4 py-3 text-left font-medium text-mint-500 dark:text-mint-400">Mês</th>
+                      <th className="px-4 py-3 text-right font-medium text-mint-500 dark:text-mint-400">Receitas</th>
+                      <th className="px-4 py-3 text-right font-medium text-mint-500 dark:text-mint-400">Despesas</th>
+                      <th className="px-4 py-3 text-right font-medium text-mint-500 dark:text-mint-400">Saldo do mês</th>
+                      <th className="px-4 py-3 text-right font-medium text-mint-500 dark:text-mint-400">Saldo acumulado</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                     {cashFlowData.map((row) => (
-                      <tr key={row.label} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{row.label}</td>
-                        <td className="px-4 py-3 text-right text-green-600">{formatCurrency(row.income)}</td>
-                        <td className="px-4 py-3 text-right text-red-600">{formatCurrency(row.expense)}</td>
-                        <td className={`px-4 py-3 text-right font-medium ${row.balance >= 0 ? "text-green-600" : "text-red-600"}`}>{formatCurrency(row.balance)}</td>
-                        <td className={`px-4 py-3 text-right font-medium ${row.cumulative >= 0 ? "text-blue-600" : "text-red-600"}`}>{formatCurrency(row.cumulative)}</td>
+                      <tr key={row.label} className="hover:bg-mint-50 dark:hover:bg-mint-800/30">
+                        <td className="px-4 py-3 font-medium text-mint-900 dark:text-mint-50">{row.label}</td>
+                        <td className="px-4 py-3 text-right text-mint-brand-deep">{formatCurrency(row.income)}</td>
+                        <td className="px-4 py-3 text-right text-mint-error">{formatCurrency(row.expense)}</td>
+                        <td className={`px-4 py-3 text-right font-medium ${row.balance >= 0 ? "text-mint-brand-deep" : "text-mint-error"}`}>{formatCurrency(row.balance)}</td>
+                        <td className={`px-4 py-3 text-right font-medium ${row.cumulative >= 0 ? "text-mint-brand" : "text-mint-error"}`}>{formatCurrency(row.cumulative)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
               {cashFlowData.length === 0 && (
-                <p className="p-8 text-center text-gray-400 dark:text-gray-500">Nenhum dado disponível</p>
+                <p className="p-8 text-center text-mint-400 dark:text-mint-500">Nenhum dado disponível</p>
               )}
             </div>
           </div>

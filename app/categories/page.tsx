@@ -169,10 +169,10 @@ export default function CategoriesPage() {
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Categorias</h1>
+          <h1 className="text-2xl font-bold text-mint-900 dark:text-mint-50">Categorias</h1>
           <button
             onClick={() => { resetForm(); setShowForm(!showForm); }}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="flex items-center gap-2 rounded-full bg-mint-900 px-4 py-2 text-sm font-medium text-white hover:bg-mint-800"
           >
             <Plus className="h-4 w-4" />
             {showForm ? "Cancelar" : "Nova"}
@@ -180,34 +180,34 @@ export default function CategoriesPage() {
         </div>
 
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="mb-8 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <h2 className="mb-4 text-lg font-semibold">{editingId ? "Editar Categoria" : "Nova Categoria"}</h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" />
-                {formErrors.name && <p className="mt-1 text-xs text-red-600">{formErrors.name}</p>}
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Nome</label>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" />
+                {formErrors.name && <p className="mt-1 text-xs text-mint-error">{formErrors.name}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Ícone</label>
-                <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" maxLength={2} />
-                {formErrors.icon && <p className="mt-1 text-xs text-red-600">{formErrors.icon}</p>}
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Ícone</label>
+                <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" maxLength={2} />
+                {formErrors.icon && <p className="mt-1 text-xs text-mint-error">{formErrors.icon}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Orçamento (R$)</label>
-                <input type="number" step="0.01" min="0" value={budgetLimit} onChange={(e) => setBudgetLimit(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" />
-                {formErrors.budget_limit && <p className="mt-1 text-xs text-red-600">{formErrors.budget_limit}</p>}
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Orçamento (R$)</label>
+                <input type="number" step="0.01" min="0" value={budgetLimit} onChange={(e) => setBudgetLimit(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" />
+                {formErrors.budget_limit && <p className="mt-1 text-xs text-mint-error">{formErrors.budget_limit}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
-                <select value={type} onChange={(e) => setType(e.target.value as any)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none">
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Tipo</label>
+                <select value={type} onChange={(e) => setType(e.target.value as any)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none">
                   <option value="expense">Despesa</option>
                   <option value="income">Receita</option>
                   <option value="both">Ambos</option>
                 </select>
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cor</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Cor</label>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {colorOptions.map((c) => (
                     <button key={c} type="button" onClick={() => setColor(c)} className={`h-8 w-8 rounded-full border-2 ${color === c ? "border-gray-900" : "border-transparent"}`} style={{ backgroundColor: c }} />
@@ -215,11 +215,11 @@ export default function CategoriesPage() {
                 </div>
               </div>
               <div className="sm:col-span-2 lg:col-span-3 flex gap-3">
-                <button type="submit" disabled={saving} className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                <button type="submit" disabled={saving} className="rounded-full bg-mint-900 px-4 py-2 font-medium text-white hover:bg-mint-800 disabled:opacity-50">
                   {saving ? "Salvando..." : editingId ? "Atualizar" : "Salvar"}
                 </button>
                 {editingId && (
-                  <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800">Cancelar</button>
+                  <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925">Cancelar</button>
                 )}
               </div>
             </form>
@@ -228,29 +228,29 @@ export default function CategoriesPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.length === 0 ? (
-            <div className="col-span-full rounded-xl bg-white dark:bg-gray-800 p-8 text-center text-gray-400 dark:text-gray-500 shadow-sm dark:shadow-gray-900/20">Nenhuma categoria ainda</div>
+            <div className="col-span-full rounded-2xl bg-white dark:bg-mint-800 p-8 text-center text-mint-400 dark:text-mint-500 shadow-mint">Nenhuma categoria ainda</div>
           ) : (
             categories.map((c) => (
-              <div key={c.id} className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
+              <div key={c.id} className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg text-lg" style={{ backgroundColor: c.color + "20", color: c.color }}>
                       {c.icon}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">{c.name}</p>
-                      <p className="text-xs capitalize text-gray-500 dark:text-gray-400">{c.type === "expense" ? "Despesa" : c.type === "income" ? "Receita" : "Ambos"}</p>
+                      <p className="font-medium text-mint-900 dark:text-mint-50">{c.name}</p>
+                      <p className="text-xs capitalize text-mint-500 dark:text-mint-400">{c.type === "expense" ? "Despesa" : c.type === "income" ? "Receita" : "Ambos"}</p>
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => startEdit(c)} className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-blue-100 dark:bg-blue-900/30 hover:text-blue-600"><Pencil className="h-4 w-4" /></button>
-                    <button onClick={() => setConfirmModal({ open: true, id: c.id })} className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-red-100 dark:bg-red-900/30 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+                    <button onClick={() => startEdit(c)} className="rounded p-1 text-mint-400 dark:text-mint-500 hover:bg-blue-100 dark:bg-mint-brand-deep/30 hover:text-mint-brand"><Pencil className="h-4 w-4" /></button>
+                    <button onClick={() => setConfirmModal({ open: true, id: c.id })} className="rounded p-1 text-mint-400 dark:text-mint-500 hover:bg-mint-error-light dark:bg-mint-error/30 hover:text-mint-error"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
                 {c.budget_limit && (
                   <div className="mt-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500 dark:text-gray-400">Orçamento</span>
+                      <span className="text-mint-500 dark:text-mint-400">Orçamento</span>
                       <span className="font-medium">{formatCurrency(c.budget_limit)}</span>
                     </div>
                   </div>

@@ -56,11 +56,11 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-mint-50 dark:bg-mint-950">
       {/* Sidebar desktop */}
-      <aside className="hidden w-64 flex-col border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 md:flex">
-        <div className="flex h-16 items-center border-b border-gray-200 dark:border-gray-700 px-6">
-          <Link href="/dashboard" className="text-lg font-bold text-gray-900 dark:text-gray-100">
+      <aside className="hidden w-64 flex-col border-r border-mint-200 dark:border-mint-700 bg-white dark:bg-mint-900 md:flex">
+        <div className="flex h-16 items-center border-b border-mint-200 dark:border-mint-700 px-6">
+          <Link href="/dashboard" className="text-lg font-bold text-mint-900 dark:text-mint-50">
             Bulma Finanças
           </Link>
         </div>
@@ -72,10 +72,10 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
                   active
-                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    ? "bg-mint-brand-light dark:bg-mint-brand-deep/30 text-mint-brand-deep dark:text-mint-brand"
+                    : "text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:hover:bg-mint-925"
                 }`}
               >
                 <Icon className="h-5 w-5" />
@@ -84,11 +84,11 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
             );
           })}
         </nav>
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
-          <p className="truncate text-xs text-gray-500 dark:text-gray-400">{userEmail}</p>
+        <div className="border-t border-mint-200 dark:border-mint-700 p-4">
+          <p className="truncate text-xs text-mint-500 dark:text-mint-400">{userEmail}</p>
           <button
             onClick={handleLogout}
-            className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+            className="mt-2 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
           >
             <LogOut className="h-4 w-4" />
             Sair
@@ -98,13 +98,13 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
 
       {/* Mobile header */}
       <div className="flex flex-1 flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 md:hidden">
-          <Link href="/dashboard" className="text-lg font-bold text-gray-900 dark:text-gray-100">
+        <header className="flex h-16 items-center justify-between border-b border-mint-200 dark:border-mint-700 bg-white dark:bg-mint-800 px-4 md:hidden">
+          <Link href="/dashboard" className="text-lg font-bold text-mint-900 dark:text-mint-50">
             Bulma Finanças
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+            className="rounded-md p-2 text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
           >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -117,12 +117,12 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
               className="flex-1 bg-black/50"
               onClick={() => setSidebarOpen(false)}
             />
-            <div className="w-64 bg-white dark:bg-gray-800 shadow-lg">
-              <div className="flex h-16 items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4">
-                <span className="text-lg font-bold text-gray-900 dark:text-gray-100">Menu</span>
+            <div className="w-64 bg-white dark:bg-mint-800 shadow-lg">
+              <div className="flex h-16 items-center justify-between border-b border-mint-200 dark:border-mint-700 px-4">
+                <span className="text-lg font-bold text-mint-900 dark:text-mint-50">Menu</span>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                  className="rounded-lg p-2 text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -136,10 +136,10 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
                       key={item.href}
                       href={item.href}
                       onClick={() => setSidebarOpen(false)}
-                      className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
+                      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
                         active
-                          ? "bg-blue-50 text-blue-700"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                          ? "bg-mint-brand-light text-mint-brand-deep"
+                          : "text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
                       }`}
                     >
                       <Icon className="h-5 w-5" />
@@ -148,14 +148,14 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
                   );
                 })}
               </nav>
-              <div className="border-t border-gray-200 dark:border-gray-700 p-4">
-                <p className="truncate text-xs text-gray-500 dark:text-gray-400">{userEmail}</p>
+              <div className="border-t border-mint-200 dark:border-mint-700 p-4">
+                <p className="truncate text-xs text-mint-500 dark:text-mint-400">{userEmail}</p>
                 <button
                   onClick={() => {
                     setSidebarOpen(false);
                     toggleTheme();
                   }}
-                  className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                  className="mt-2 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
                 >
                   {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                   {theme === "dark" ? "Modo claro" : "Modo escuro"}
@@ -165,7 +165,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
                     setSidebarOpen(false);
                     handleLogout();
                   }}
-                  className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                  className="mt-2 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
                 >
                   <LogOut className="h-4 w-4" />
                   Sair
@@ -179,7 +179,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
         <AutoRecurringChecker />
 
         {/* Footer */}
-        <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 text-center text-xs text-gray-400 dark:text-gray-500">
+        <footer className="border-t border-mint-200 dark:border-mint-700 bg-white dark:bg-mint-800 py-4 text-center text-xs text-mint-400 dark:text-mint-500">
           Bulma Finanças v2 • Desenvolvido por Rael
         </footer>
       </div>

@@ -76,32 +76,32 @@ export default function PerfilPage() {
   return (
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Meu Perfil</h1>
-        <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
+        <h1 className="text-2xl font-bold text-mint-900 dark:text-mint-50">Meu Perfil</h1>
+        <p className="text-mint-500 dark:text-mint-400">{user?.email}</p>
 
         {/* Dados do perfil */}
-        <div className="mt-6 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="mt-6 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
           <div className="mb-4 flex items-center gap-2">
-            <User className="h-5 w-5 text-blue-600" />
+            <User className="h-5 w-5 text-mint-brand" />
             <h2 className="text-lg font-semibold">Dados pessoais</h2>
           </div>
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">
                 Nome completo
               </label>
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 placeholder="Seu nome"
               />
             </div>
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-full bg-mint-900 px-4 py-2 text-sm font-medium text-white hover:bg-mint-800 disabled:opacity-50"
             >
               <Save className="h-4 w-4" />
               {saving ? "Salvando..." : "Salvar nome"}
@@ -110,21 +110,21 @@ export default function PerfilPage() {
         </div>
 
         {/* Alterar senha */}
-        <div className="mt-6 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+        <div className="mt-6 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
           <div className="mb-4 flex items-center gap-2">
-            <Lock className="h-5 w-5 text-blue-600" />
+            <Lock className="h-5 w-5 text-mint-brand" />
             <h2 className="text-lg font-semibold">Alterar senha</h2>
           </div>
           <form onSubmit={handleChangePassword} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">
                 Nova senha
               </label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 placeholder="Mínimo 6 caracteres"
                 minLength={6}
               />
@@ -132,7 +132,7 @@ export default function PerfilPage() {
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-full bg-mint-900 px-4 py-2 text-sm font-medium text-white hover:bg-mint-800 disabled:opacity-50"
             >
               <Lock className="h-4 w-4" />
               {saving ? "Alterando..." : "Alterar senha"}

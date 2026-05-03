@@ -252,63 +252,63 @@ export default function DashboardPage() {
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-mint-900 dark:text-mint-50">Dashboard</h1>
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <Calendar className="h-4 w-4 text-mint-500 dark:text-mint-400" />
             <input
               type="month"
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm"
+              className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm"
             />
           </div>
         </div>
 
         {/* Cards resumo */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
-                <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">{formatCurrency(summary.balance)}</p>
+                <p className="text-sm text-mint-500 dark:text-mint-400">Saldo</p>
+                <p className="mt-1 text-2xl font-bold text-mint-900 dark:text-mint-50">{formatCurrency(summary.balance)}</p>
               </div>
-              <div className="rounded-lg bg-blue-100 dark:bg-blue-900/30 p-3">
-                <Wallet className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="rounded-lg bg-blue-100 dark:bg-mint-brand-deep/30 p-3">
+                <Wallet className="h-6 w-6 text-mint-brand dark:text-mint-brand" />
               </div>
             </div>
           </div>
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Receitas</p>
-                <p className="mt-1 text-2xl font-bold text-green-600">{formatCurrency(summary.income)}</p>
+                <p className="text-sm text-mint-500 dark:text-mint-400">Receitas</p>
+                <p className="mt-1 text-2xl font-bold text-mint-brand-deep">{formatCurrency(summary.income)}</p>
               </div>
-              <div className="rounded-lg bg-green-100 dark:bg-green-900/30 p-3">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+              <div className="rounded-lg bg-mint-brand-light dark:bg-mint-brand-deep/30 p-3">
+                <TrendingUp className="h-6 w-6 text-mint-brand-deep" />
               </div>
             </div>
           </div>
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Despesas</p>
-                <p className="mt-1 text-2xl font-bold text-red-600">{formatCurrency(summary.expense)}</p>
+                <p className="text-sm text-mint-500 dark:text-mint-400">Despesas</p>
+                <p className="mt-1 text-2xl font-bold text-mint-error">{formatCurrency(summary.expense)}</p>
               </div>
-              <div className="rounded-lg bg-red-100 dark:bg-red-900/30 p-3">
-                <TrendingDown className="h-6 w-6 text-red-600" />
+              <div className="rounded-lg bg-mint-error-light dark:bg-mint-error/30 p-3">
+                <TrendingDown className="h-6 w-6 text-mint-error" />
               </div>
             </div>
           </div>
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Economia</p>
-                <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <p className="text-sm text-mint-500 dark:text-mint-400">Economia</p>
+                <p className="mt-1 text-2xl font-bold text-mint-900 dark:text-mint-50">
                   {summary.income > 0 ? `${((1 - summary.expense / summary.income) * 100).toFixed(1)}%` : "0%"}
                 </p>
               </div>
-              <div className="rounded-lg bg-purple-100 dark:bg-purple-900/30 p-3">
-                <PiggyBank className="h-6 w-6 text-purple-600" />
+              <div className="rounded-lg bg-mint-soft-blue-light dark:bg-mint-soft-blue/30 p-3">
+                <PiggyBank className="h-6 w-6 text-mint-soft-blue" />
               </div>
             </div>
           </div>
@@ -316,8 +316,8 @@ export default function DashboardPage() {
 
         {/* Gráficos */}
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Despesas por categoria</h2>
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
+            <h2 className="mb-4 text-lg font-semibold text-mint-900 dark:text-mint-50">Despesas por categoria</h2>
             {categoryData.length > 0 ? (
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
@@ -339,24 +339,24 @@ export default function DashboardPage() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-center text-gray-500 dark:text-gray-400 py-12">Nenhuma despesa no período</p>
+              <p className="text-center text-mint-500 dark:text-mint-400 py-12">Nenhuma despesa no período</p>
             )}
           </div>
 
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Evolução mensal</h2>
-              <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <h2 className="text-lg font-semibold text-mint-900 dark:text-mint-50">Evolução mensal</h2>
+              <div className="flex rounded-lg border border-mint-200 dark:border-mint-700 overflow-hidden">
                 <button
                   onClick={() => setChartType("bar")}
-                  className={`flex items-center gap-1 px-3 py-1 text-xs font-medium ${chartType === "bar" ? "bg-blue-600 text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                  className={`flex items-center gap-1 px-3 py-1 text-xs font-medium ${chartType === "bar" ? "bg-mint-900 text-white" : "bg-white dark:bg-mint-800 text-mint-600 dark:text-mint-400 hover:bg-mint-50 dark:hover:bg-mint-800"}`}
                 >
                   <BarChart3 className="h-3 w-3" />
                   Barras
                 </button>
                 <button
                   onClick={() => setChartType("line")}
-                  className={`flex items-center gap-1 px-3 py-1 text-xs font-medium ${chartType === "line" ? "bg-blue-600 text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                  className={`flex items-center gap-1 px-3 py-1 text-xs font-medium ${chartType === "line" ? "bg-mint-900 text-white" : "bg-white dark:bg-mint-800 text-mint-600 dark:text-mint-400 hover:bg-mint-50 dark:hover:bg-mint-800"}`}
                 >
                   <Activity className="h-3 w-3" />
                   Linhas
@@ -388,16 +388,16 @@ export default function DashboardPage() {
                 )}
               </ResponsiveContainer>
             ) : (
-              <p className="text-center text-gray-500 dark:text-gray-400 py-12">Nenhum dado disponível</p>
+              <p className="text-center text-mint-500 dark:text-mint-400 py-12">Nenhum dado disponível</p>
             )}
           </div>
         </div>
 
         {/* Metas e Contas */}
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Metas</h2>
+              <h2 className="text-lg font-semibold text-mint-900 dark:text-mint-50">Metas</h2>
               <Target className="h-5 w-5 text-gray-400" />
             </div>
             {goals.length > 0 ? (
@@ -405,10 +405,10 @@ export default function DashboardPage() {
                 {goals.slice(0, 3).map((g) => (
                   <div key={g.id}>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-700 dark:text-gray-300">{g.name}</span>
-                      <span className="text-gray-500 dark:text-gray-400">{((g.current_amount / g.target_amount) * 100).toFixed(0)}%</span>
+                      <span className="text-mint-700 dark:text-mint-300">{g.name}</span>
+                      <span className="text-mint-500 dark:text-mint-400">{((g.current_amount / g.target_amount) * 100).toFixed(0)}%</span>
                     </div>
-                    <div className="mt-1 h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+                    <div className="mt-1 h-2 w-full rounded-full bg-mint-200 dark:bg-mint-800">
                       <div
                         className="h-2 rounded-full"
                         style={{
@@ -421,13 +421,13 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">Nenhuma meta ativa</p>
+              <p className="text-sm text-mint-500 dark:text-mint-400">Nenhuma meta ativa</p>
             )}
           </div>
 
-          <div className="rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Contas</h2>
+              <h2 className="text-lg font-semibold text-mint-900 dark:text-mint-50">Contas</h2>
               <CreditCard className="h-5 w-5 text-gray-400" />
             </div>
             {accounts.length > 0 ? (
@@ -436,41 +436,41 @@ export default function DashboardPage() {
                   <div key={acc.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="h-3 w-3 rounded-full" style={{ backgroundColor: acc.color }} />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{acc.name}</span>
+                      <span className="text-sm text-mint-700 dark:text-mint-300">{acc.name}</span>
                     </div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{formatCurrency(acc.balance)}</span>
+                    <span className="text-sm font-medium text-mint-900 dark:text-mint-50">{formatCurrency(acc.balance)}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">Nenhuma conta cadastrada</p>
+              <p className="text-sm text-mint-500 dark:text-mint-400">Nenhuma conta cadastrada</p>
             )}
           </div>
         </div>
 
         {/* Últimas transações */}
-        <div className="mt-6 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Últimas transações</h2>
+        <div className="mt-6 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
+          <h2 className="mb-4 text-lg font-semibold text-mint-900 dark:text-mint-50">Últimas transações</h2>
           <div className="space-y-3">
             {recentTransactions.length > 0 ? (
               recentTransactions.map((t) => (
                 <div key={t.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-green-100 dark:bg-green-900/30 text-green-600" : "bg-red-100 dark:bg-red-900/30 text-red-600"}`}>
+                    <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-mint-brand-light dark:bg-mint-brand-deep/30 text-mint-brand-deep" : "bg-mint-error-light dark:bg-mint-error/30 text-mint-error"}`}>
                       {t.type === "income" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">{t.description}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{t.category?.name || "Sem categoria"} • {new Date(t.date).toLocaleDateString("pt-BR")}</p>
+                      <p className="font-medium text-mint-900 dark:text-mint-50">{t.description}</p>
+                      <p className="text-xs text-mint-500 dark:text-mint-400">{t.category?.name || "Sem categoria"} • {new Date(t.date).toLocaleDateString("pt-BR")}</p>
                     </div>
                   </div>
-                  <p className={`font-semibold ${t.type === "income" ? "text-green-600" : "text-red-600"}`}>
+                  <p className={`font-semibold ${t.type === "income" ? "text-mint-brand-deep" : "text-mint-error"}`}>
                     {t.type === "income" ? "+" : "-"}{formatCurrency(t.amount)}
                   </p>
                 </div>
               ))
             ) : (
-              <p className="text-center text-gray-500 dark:text-gray-400 py-4">Nenhuma transação</p>
+              <p className="text-center text-mint-500 dark:text-mint-400 py-4">Nenhuma transação</p>
             )}
           </div>
         </div>
