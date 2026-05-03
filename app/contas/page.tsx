@@ -223,18 +223,18 @@ export default function ContasPage() {
     <ProtectedLayout userEmail={user?.email}>
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Contas</h1>
+          <h1 className="text-2xl font-bold text-mint-900 dark:text-mint-50">Contas</h1>
           <div className="flex gap-3">
             <button
               onClick={() => { resetForm(); setShowTransfer(false); setShowForm(!showForm); }}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="flex items-center gap-2 rounded-full bg-mint-900 px-4 py-2 text-sm font-medium text-white hover:bg-mint-800"
             >
               <Plus className="h-4 w-4" />
               {showForm ? "Cancelar" : "Nova Conta"}
             </button>
             <button
               onClick={() => { setShowForm(false); setShowTransfer(!showTransfer); }}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+              className="flex items-center gap-2 rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm font-medium text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
             >
               <ArrowRightLeft className="h-4 w-4" />
               Transferir
@@ -244,25 +244,25 @@ export default function ContasPage() {
 
         {/* Form Conta */}
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="mb-8 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <h2 className="mb-4 text-lg font-semibold">{editingId ? "Editar Conta" : "Nova Conta"}</h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Nome</label>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
-                <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none">
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Tipo</label>
+                <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none">
                   {accountTypeOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Saldo inicial (R$)</label>
-                <input type="number" step="0.01" value={balance} onChange={(e) => setBalance(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" />
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Saldo inicial (R$)</label>
+                <input type="number" step="0.01" value={balance} onChange={(e) => setBalance(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" />
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cor</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Cor</label>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {colorOptions.map((c) => (
                     <button key={c} type="button" onClick={() => setColor(c)} className={`h-8 w-8 rounded-full border-2 ${color === c ? "border-gray-900" : "border-transparent"}`} style={{ backgroundColor: c }} />
@@ -270,11 +270,11 @@ export default function ContasPage() {
                 </div>
               </div>
               <div className="sm:col-span-2 lg:col-span-3 flex gap-3">
-                <button type="submit" disabled={saving} className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                <button type="submit" disabled={saving} className="rounded-full bg-mint-900 px-4 py-2 font-medium text-white hover:bg-mint-800 disabled:opacity-50">
                   {saving ? "Salvando..." : editingId ? "Atualizar" : "Salvar"}
                 </button>
                 {editingId && (
-                  <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800">Cancelar</button>
+                  <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925">Cancelar</button>
                 )}
               </div>
             </form>
@@ -283,40 +283,40 @@ export default function ContasPage() {
 
         {/* Form Transferência */}
         {showTransfer && (
-          <div className="mb-8 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="mb-8 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <h2 className="mb-4 text-lg font-semibold">Transferência entre Contas</h2>
             <form onSubmit={handleTransfer} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">De</label>
-                <select value={fromAccountId} onChange={(e) => setFromAccountId(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" required>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">De</label>
+                <select value={fromAccountId} onChange={(e) => setFromAccountId(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" required>
                   <option value="">Selecione...</option>
                   {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Para</label>
-                <select value={toAccountId} onChange={(e) => setToAccountId(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" required>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Para</label>
+                <select value={toAccountId} onChange={(e) => setToAccountId(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" required>
                   <option value="">Selecione...</option>
                   {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor (R$)</label>
-                <input type="number" step="0.01" min="0" value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Valor (R$)</label>
+                <input type="number" step="0.01" min="0" value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data</label>
-                <input type="date" value={transferDate} onChange={(e) => setTransferDate(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Data</label>
+                <input type="date" value={transferDate} onChange={(e) => setTransferDate(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" required />
               </div>
               <div className="sm:col-span-2 lg:col-span-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Descrição (opcional)</label>
-                <input type="text" value={transferDescription} onChange={(e) => setTransferDescription(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none" placeholder="Ex: Transferência para reserva" />
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Descrição (opcional)</label>
+                <input type="text" value={transferDescription} onChange={(e) => setTransferDescription(e.target.value)} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none" placeholder="Ex: Transferência para reserva" />
               </div>
               <div className="sm:col-span-2 lg:col-span-4 flex gap-3">
-                <button type="submit" disabled={saving} className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                <button type="submit" disabled={saving} className="rounded-full bg-mint-900 px-4 py-2 font-medium text-white hover:bg-mint-800 disabled:opacity-50">
                   {saving ? "Transferindo..." : "Confirmar Transferência"}
                 </button>
-                <button type="button" onClick={() => setShowTransfer(false)} className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800">Cancelar</button>
+                <button type="button" onClick={() => setShowTransfer(false)} className="rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925">Cancelar</button>
               </div>
             </form>
           </div>
@@ -325,32 +325,32 @@ export default function ContasPage() {
         {/* Lista de Contas */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {accounts.length === 0 ? (
-            <div className="col-span-full rounded-xl bg-white dark:bg-gray-800 p-8 text-center text-gray-400 dark:text-gray-500 shadow-sm dark:shadow-gray-900/20">
-              <Wallet className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+            <div className="col-span-full rounded-2xl bg-white dark:bg-mint-800 p-8 text-center text-mint-400 dark:text-mint-500 shadow-mint">
+              <Wallet className="mx-auto mb-3 h-10 w-10 text-mint-300 dark:text-gray-600" />
               <p>Nenhuma conta cadastrada ainda</p>
               <p className="mt-1 text-sm">Adicione suas contas bancárias e carteiras</p>
             </div>
           ) : (
             accounts.map((acc) => (
-              <div key={acc.id} className="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-gray-900/20">
+              <div key={acc.id} className="rounded-2xl bg-white dark:bg-mint-800 p-5 shadow-mint">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: acc.color + "20", color: acc.color }}>
                       {accountTypeIcons[acc.type] || <Wallet className="h-5 w-5" />}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">{acc.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{accountTypeLabels[acc.type] || acc.type}</p>
+                      <p className="font-medium text-mint-900 dark:text-mint-50">{acc.name}</p>
+                      <p className="text-xs text-mint-500 dark:text-mint-400">{accountTypeLabels[acc.type] || acc.type}</p>
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => startEdit(acc)} className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-blue-100 dark:bg-blue-900/30 hover:text-blue-600"><Pencil className="h-4 w-4" /></button>
-                    <button onClick={() => setConfirmModal({ open: true, id: acc.id })} className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-red-100 dark:bg-red-900/30 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
+                    <button onClick={() => startEdit(acc)} className="rounded p-1 text-mint-400 dark:text-mint-500 hover:bg-blue-100 dark:bg-mint-brand-deep/30 hover:text-mint-brand"><Pencil className="h-4 w-4" /></button>
+                    <button onClick={() => setConfirmModal({ open: true, id: acc.id })} className="rounded p-1 text-mint-400 dark:text-mint-500 hover:bg-mint-error-light dark:bg-mint-error/30 hover:text-mint-error"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Saldo</p>
-                  <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{formatCurrency(acc.balance)}</p>
+                  <p className="text-sm text-mint-500 dark:text-mint-400">Saldo</p>
+                  <p className="text-xl font-bold text-mint-900 dark:text-mint-50">{formatCurrency(acc.balance)}</p>
                 </div>
               </div>
             ))

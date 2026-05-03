@@ -456,7 +456,7 @@ export default function TransactionsPage() {
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Transações</h1>
+          <h1 className="text-2xl font-bold text-mint-900 dark:text-mint-50">Transações</h1>
           <div className="flex gap-3">
             <button
               onClick={() => {
@@ -464,7 +464,7 @@ export default function TransactionsPage() {
                 setShowImport(false);
                 setShowForm(!showForm);
               }}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="flex items-center gap-2 rounded-full bg-mint-900 px-4 py-2 text-sm font-medium text-white hover:bg-mint-800"
             >
               <Plus className="h-4 w-4" />
               {showForm ? "Cancelar" : editingId ? "Editando..." : "Nova Transação"}
@@ -474,7 +474,7 @@ export default function TransactionsPage() {
                 setShowForm(false);
                 setShowImport(!showImport);
               }}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+              className="flex items-center gap-2 rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm font-medium text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
             >
               <Upload className="h-4 w-4" />
               {showImport ? "Cancelar" : "Importar CSV"}
@@ -484,57 +484,57 @@ export default function TransactionsPage() {
 
         {/* Form */}
         {showForm && (
-          <div className="mb-8 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-gray-900/20">
+          <div className="mb-8 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-mint">
             <h2 className="mb-4 text-lg font-semibold">
               {editingId ? "Editar Transação" : "Nova Transação"}
             </h2>
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Descrição</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Descrição</label>
                 <input
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                   placeholder="Ex: IFOOD, Netflix, Combustível..."
                 />
-                {formErrors.description && <p className="mt-1 text-xs text-red-600">{formErrors.description}</p>}
+                {formErrors.description && <p className="mt-1 text-xs text-mint-error">{formErrors.description}</p>}
                 {autoCatSuggestion && (
-                  <p className="mt-1 flex items-center gap-1 text-xs text-blue-600">
+                  <p className="mt-1 flex items-center gap-1 text-xs text-mint-brand">
                     <Wand2 className="h-3 w-3" />
                     Categoria sugerida: <span className="font-medium">{autoCatSuggestion}</span>
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor (R$)</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Valor (R$)</label>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 />
-                {formErrors.amount && <p className="mt-1 text-xs text-red-600">{formErrors.amount}</p>}
+                {formErrors.amount && <p className="mt-1 text-xs text-mint-error">{formErrors.amount}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Tipo</label>
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value as "expense" | "income")}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 >
                   <option value="expense">Despesa</option>
                   <option value="income">Receita</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Categoria</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Categoria</label>
                 <select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 >
                   <option value="">Selecione...</option>
                   {categories.map((c) => (
@@ -543,11 +543,11 @@ export default function TransactionsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Conta</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Conta</label>
                 <select
                   value={accountId}
                   onChange={(e) => setAccountId(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 >
                   <option value="">Selecione...</option>
                   {accounts.map((a) => (
@@ -556,22 +556,22 @@ export default function TransactionsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Data</label>
                 <input
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                 />
-                {formErrors.date && <p className="mt-1 text-xs text-red-600">{formErrors.date}</p>}
+                {formErrors.date && <p className="mt-1 text-xs text-mint-error">{formErrors.date}</p>}
               </div>
               <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-3">
-                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <label className="flex items-center gap-2 text-sm text-mint-700 dark:text-mint-300">
                   <input
                     type="checkbox"
                     checked={isRecurring}
                     onChange={(e) => setIsRecurring(e.target.checked)}
-                    className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-mint-300 dark:border-mint-600 text-mint-brand focus:ring-mint-brand"
                   />
                   Transação recorrente
                 </label>
@@ -579,7 +579,7 @@ export default function TransactionsPage() {
                   <select
                     value={recurringInterval}
                     onChange={(e) => setRecurringInterval(e.target.value as any)}
-                    className="rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                    className="rounded-lg border border-mint-300 dark:border-mint-600 px-3 py-1.5 text-sm focus:border-mint-brand focus:outline-none"
                   >
                     <option value="daily">Diária</option>
                     <option value="weekly">Semanal</option>
@@ -592,7 +592,7 @@ export default function TransactionsPage() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="rounded-full bg-mint-900 px-4 py-2 font-medium text-white hover:bg-mint-800 disabled:opacity-50"
                 >
                   {saving ? "Salvando..." : editingId ? "Atualizar" : "Salvar Transação"}
                 </button>
@@ -600,7 +600,7 @@ export default function TransactionsPage() {
                   <button
                     type="button"
                     onClick={() => { resetForm(); setShowForm(false); }}
-                    className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                    className="rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
                   >
                     Cancelar
                   </button>
@@ -612,27 +612,27 @@ export default function TransactionsPage() {
 
         {/* Import CSV */}
         {showImport && (
-          <div className="mb-8 rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm">
+          <div className="mb-8 rounded-2xl bg-white dark:bg-mint-800 p-6 shadow-sm">
             <h2 className="mb-4 text-lg font-semibold">Importar Extrato CSV</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Arquivo CSV</label>
+                <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Arquivo CSV</label>
                 <input
                   type="file"
                   accept=".csv,.txt"
                   onChange={handleFileUpload}
-                  className="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-blue-700"
+                  className="mt-1 block w-full text-sm text-mint-500 dark:text-mint-400 file:mr-4 file:rounded-full file:border-0 file:bg-mint-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-blue-700"
                 />
               </div>
 
               {csvPreview.length > 0 && (
                 <>
-                  <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div className="overflow-x-auto rounded-lg border border-mint-200 dark:border-mint-800">
                     <table className="min-w-full text-sm">
-                      <thead className="bg-gray-50 dark:bg-gray-900">
+                      <thead className="bg-mint-50 dark:bg-mint-950">
                         <tr>
                           {csvPreview[0].map((cell, i) => (
-                            <th key={i} className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">{cell}</th>
+                            <th key={i} className="px-3 py-2 text-left text-xs font-medium text-mint-500 dark:text-mint-400">{cell}</th>
                           ))}
                         </tr>
                       </thead>
@@ -640,7 +640,7 @@ export default function TransactionsPage() {
                         {csvPreview.slice(1).map((row, ri) => (
                           <tr key={ri}>
                             {row.map((cell, ci) => (
-                              <td key={ci} className="px-3 py-2 text-gray-700 dark:text-gray-300">{cell}</td>
+                              <td key={ci} className="px-3 py-2 text-mint-700 dark:text-mint-300">{cell}</td>
                             ))}
                           </tr>
                         ))}
@@ -650,29 +650,29 @@ export default function TransactionsPage() {
 
                   <div className="grid gap-3 sm:grid-cols-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Coluna Data</label>
-                      <input type="number" min={0} value={colDate} onChange={(e) => setColDate(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                      <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Coluna Data</label>
+                      <input type="number" min={0} value={colDate} onChange={(e) => setColDate(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Coluna Descrição</label>
-                      <input type="number" min={0} value={colDescription} onChange={(e) => setColDescription(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                      <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Coluna Descrição</label>
+                      <input type="number" min={0} value={colDescription} onChange={(e) => setColDescription(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Coluna Valor</label>
-                      <input type="number" min={0} value={colAmount} onChange={(e) => setColAmount(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                      <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Coluna Valor</label>
+                      <input type="number" min={0} value={colAmount} onChange={(e) => setColAmount(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none" />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Coluna Tipo (-1 = auto)</label>
-                      <input type="number" min={-1} value={colType} onChange={(e) => setColType(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+                      <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Coluna Tipo (-1 = auto)</label>
+                      <input type="number" min={-1} value={colType} onChange={(e) => setColType(parseInt(e.target.value))} className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Conta padrão</label>
+                    <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">Conta padrão</label>
                     <select
                       value={importAccountId}
                       onChange={(e) => setImportAccountId(e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                      className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 focus:border-mint-brand focus:outline-none"
                     >
                       <option value="">Nenhuma</option>
                       {accounts.map((a) => (
@@ -691,7 +691,7 @@ export default function TransactionsPage() {
                     </button>
                     <button
                       onClick={() => { setShowImport(false); setCsvPreview([]); }}
-                      className="rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                      className="rounded-lg border border-mint-300 dark:border-mint-600 px-4 py-2 text-sm text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
                     >
                       Cancelar
                     </button>
@@ -706,19 +706,19 @@ export default function TransactionsPage() {
         <div className="mb-6 space-y-3">
           <div className="flex gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mint-400 dark:text-mint-500" />
               <input
                 type="text"
                 placeholder="Buscar por descrição..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none"
+                className="w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 py-2 pl-10 pr-4 focus:border-mint-brand focus:outline-none"
               />
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium ${
-                showFilters ? "border-blue-500 bg-blue-50 text-blue-700" : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800"
+                showFilters ? "border-blue-500 bg-mint-brand-light text-mint-brand-deep" : "border-mint-300 dark:border-mint-600 text-mint-700 dark:text-mint-300 hover:bg-mint-100 dark:bg-mint-925"
               }`}
             >
               <Filter className="h-4 w-4" />
@@ -727,14 +727,14 @@ export default function TransactionsPage() {
           </div>
 
           {showFilters && (
-            <div className="rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm dark:shadow-gray-900/20">
+            <div className="rounded-2xl bg-white dark:bg-mint-800 p-4 shadow-mint">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Categoria</label>
+                  <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Categoria</label>
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
                   >
                     <option value="">Todas</option>
                     {categories.map((c) => (
@@ -743,11 +743,11 @@ export default function TransactionsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Tipo</label>
+                  <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Tipo</label>
                   <select
                     value={filterType}
                     onChange={(e) => setFilterType(e.target.value as any)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
                   >
                     <option value="">Todos</option>
                     <option value="expense">Despesa</option>
@@ -755,19 +755,19 @@ export default function TransactionsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">Mês</label>
+                  <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Mês</label>
                   <input
                     type="month"
                     value={filterMonth}
                     onChange={(e) => setFilterMonth(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
                   />
                 </div>
               </div>
               <div className="mt-3 flex gap-2">
                 <button
                   onClick={() => { setFilterCategory(""); setFilterType(""); setFilterMonth(""); setSearchQuery(""); }}
-                  className="flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-1.5 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-900"
+                  className="flex items-center gap-1 rounded-lg border border-mint-300 dark:border-mint-600 px-3 py-1.5 text-xs text-mint-600 dark:text-mint-400 hover:bg-mint-50 dark:hover:bg-mint-800 dark:bg-mint-950"
                 >
                   <X className="h-3 w-3" /> Limpar filtros
                 </button>
@@ -778,7 +778,7 @@ export default function TransactionsPage() {
 
         {/* Sort & Count */}
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-mint-500 dark:text-mint-400">
             {filteredTransactions.length} transação{filteredTransactions.length !== 1 ? "es" : ""}
           </p>
           <div className="flex gap-2">
@@ -788,8 +788,8 @@ export default function TransactionsPage() {
                 onClick={() => toggleSort(field)}
                 className={`flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs font-medium ${
                   sortBy === field
-                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                    : "border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-900"
+                    ? "border-blue-500 bg-mint-brand-light text-mint-brand-deep"
+                    : "border-mint-300 dark:border-mint-600 text-mint-600 dark:text-mint-400 hover:bg-mint-50 dark:hover:bg-mint-800 dark:bg-mint-950"
                 }`}
               >
                 <ArrowUpDown className="h-3 w-3" />
@@ -801,48 +801,48 @@ export default function TransactionsPage() {
         </div>
 
         {/* Lista */}
-        <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/20">
+        <div className="rounded-2xl bg-white dark:bg-mint-800 shadow-mint">
           <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {filteredTransactions.length === 0 ? (
-              <div className="p-8 text-center text-gray-400 dark:text-gray-500">
+              <div className="p-8 text-center text-mint-400 dark:text-mint-500">
                 {transactions.length === 0 ? "Nenhuma transação ainda" : "Nenhuma transação encontrada com os filtros atuais"}
               </div>
             ) : (
               filteredTransactions.map((t) => (
-                <div key={t.id} className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-900">
+                <div key={t.id} className="flex items-center justify-between p-4 hover:bg-mint-50 dark:hover:bg-mint-800 dark:bg-mint-950">
                   <div className="flex items-center gap-3">
-                    <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-green-100 dark:bg-green-900/30 text-green-600" : "bg-red-100 dark:bg-red-900/30 text-red-600"}`}>
+                    <div className={`rounded-lg p-2 ${t.type === "income" ? "bg-mint-brand-light dark:bg-mint-brand-deep/30 text-mint-brand-deep" : "bg-mint-error-light dark:bg-mint-error/30 text-mint-error"}`}>
                       {t.type === "income" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">{t.description}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="font-medium text-mint-900 dark:text-mint-50">{t.description}</p>
+                      <p className="text-xs text-mint-500 dark:text-mint-400">
                         {t.category?.name || "Sem categoria"} {t.account?.name ? `• ${t.account.name}` : ""} • {new Date(t.date).toLocaleDateString("pt-BR")}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <p className={`font-semibold ${t.type === "income" ? "text-green-600" : "text-red-600"}`}>
+                    <p className={`font-semibold ${t.type === "income" ? "text-mint-brand-deep" : "text-mint-error"}`}>
                       {t.type === "income" ? "+" : "-"}{formatCurrency(t.amount)}
                     </p>
                     {t.is_recurring && (
                       <button
                         onClick={() => generateNextOccurrence(t)}
                         title="Gerar próxima ocorrência"
-                        className="rounded p-1 text-purple-400 hover:bg-purple-100 hover:text-purple-600"
+                        className="rounded p-1 text-purple-400 hover:bg-mint-soft-blue-light hover:text-mint-soft-blue"
                       >
                         <Repeat className="h-4 w-4" />
                       </button>
                     )}
                     <button
                       onClick={() => startEdit(t)}
-                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-blue-100 dark:bg-blue-900/30 hover:text-blue-600"
+                      className="rounded p-1 text-mint-400 dark:text-mint-500 hover:bg-blue-100 dark:bg-mint-brand-deep/30 hover:text-mint-brand"
                     >
                       <Pencil className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => setConfirmModal({ open: true, id: t.id })}
-                      className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-red-100 dark:bg-red-900/30 hover:text-red-600"
+                      className="rounded p-1 text-mint-400 dark:text-mint-500 hover:bg-mint-error-light dark:bg-mint-error/30 hover:text-mint-error"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

@@ -138,11 +138,11 @@ export default function PlanoPage() {
 
   function getPriorityColor(priority: string) {
     switch (priority) {
-      case "urgente": return "bg-red-100 text-red-700 border-red-200";
+      case "urgente": return "bg-mint-error-light text-red-700 border-red-200";
       case "alta": return "bg-orange-100 text-orange-700 border-orange-200";
-      case "media": return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      case "baixa": return "bg-gray-100 text-gray-700 border-gray-200";
-      default: return "bg-gray-100 text-gray-700";
+      case "media": return "bg-mint-amber-light text-yellow-700 border-yellow-200";
+      case "baixa": return "bg-mint-100 text-mint-700 border-gray-200";
+      default: return "bg-mint-100 text-gray-700";
     }
   }
 
@@ -169,12 +169,12 @@ export default function PlanoPage() {
 
   function getCategoryColor(category: string) {
     switch (category) {
-      case "protestos": return "bg-red-50 text-red-600";
+      case "protestos": return "bg-red-50 text-mint-error";
       case "dividas": return "bg-orange-50 text-orange-600";
-      case "assinaturas": return "bg-purple-50 text-purple-600";
-      case "score": return "bg-blue-50 text-blue-600";
-      case "investigacao": return "bg-yellow-50 text-yellow-600";
-      default: return "bg-gray-50 text-gray-600";
+      case "assinaturas": return "bg-purple-50 text-mint-soft-blue";
+      case "score": return "bg-mint-brand-light text-mint-brand";
+      case "investigacao": return "bg-yellow-50 text-mint-amber";
+      default: return "bg-mint-50 text-gray-600";
     }
   }
 
@@ -192,7 +192,7 @@ export default function PlanoPage() {
       <header className="bg-white shadow-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-gray-500 hover:text-gray-700">
+            <Link href="/dashboard" className="text-mint-500 hover:text-gray-700">
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <h1 className="text-xl font-bold text-gray-900">Plano de Ação</h1>
@@ -204,74 +204,74 @@ export default function PlanoPage() {
         {/* Cards de Resumo */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* Progresso Plano */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 mb-3">
               <div className="rounded-lg bg-blue-100 p-2">
-                <Target className="h-5 w-5 text-blue-600" />
+                <Target className="h-5 w-5 text-mint-brand" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Progresso do Plano</p>
-                <p className="text-2xl font-bold text-blue-600">{progresso}%</p>
+                <p className="text-2xl font-bold text-mint-brand">{progresso}%</p>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div className="w-full bg-mint-200 rounded-full h-2.5">
               <div
-                className="bg-blue-600 h-2.5 rounded-full transition-all"
+                className="bg-mint-900 h-2.5 rounded-full transition-all"
                 style={{ width: `${progresso}%` }}
               />
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-mint-500 mt-2">
               {concluidos} de {total} tarefas concluídas
             </p>
           </div>
 
           {/* Score */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 mb-3">
-              <div className="rounded-lg bg-green-100 p-2">
-                <TrendingUp className="h-5 w-5 text-green-600" />
+              <div className="rounded-lg bg-mint-brand-light p-2">
+                <TrendingUp className="h-5 w-5 text-mint-brand-deep" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Score Serasa</p>
-                <p className={`text-2xl font-bold ${scoreAtual < 500 ? "text-red-600" : scoreAtual < 700 ? "text-yellow-600" : "text-green-600"}`}>
+                <p className={`text-2xl font-bold ${scoreAtual < 500 ? "text-mint-error" : scoreAtual < 700 ? "text-mint-amber" : "text-mint-brand-deep"}`}>
                   {scoreAtual}
                 </p>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div className="w-full bg-mint-200 rounded-full h-2.5">
               <div
                 className={`h-2.5 rounded-full transition-all ${scoreAtual < 500 ? "bg-red-500" : scoreAtual < 700 ? "bg-yellow-500" : "bg-green-500"}`}
                 style={{ width: `${scoreProgresso}%` }}
               />
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-mint-500 mt-2">
               Meta: {scoreMeta} ({scoreMeta - scoreAtual} pontos para lá)
             </p>
           </div>
 
           {/* Tarefas Urgentes */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 mb-3">
-              <div className="rounded-lg bg-red-100 p-2">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+              <div className="rounded-lg bg-mint-error-light p-2">
+                <AlertTriangle className="h-5 w-5 text-mint-error" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Vencem em 3 dias</p>
-                <p className="text-2xl font-bold text-red-600">{tarefasUrgentes.length}</p>
+                <p className="text-2xl font-bold text-mint-error">{tarefasUrgentes.length}</p>
               </div>
             </div>
             <p className="text-xs text-gray-500">
               {tarefasAtrasadas.length > 0 && (
-                <span className="text-red-500 font-medium">{tarefasAtrasadas.length} atrasadas</span>
+                <span className="text-mint-error font-medium">{tarefasAtrasadas.length} atrasadas</span>
               )}
             </p>
           </div>
 
           {/* Próxima Meta */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
+          <div className="rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 mb-3">
-              <div className="rounded-lg bg-purple-100 p-2">
-                <Calendar className="h-5 w-5 text-purple-600" />
+              <div className="rounded-lg bg-mint-soft-blue-light p-2">
+                <Calendar className="h-5 w-5 text-mint-soft-blue" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Próxima Tarefa</p>
@@ -282,7 +282,7 @@ export default function PlanoPage() {
                 </p>
               </div>
             </div>
-            <p className="text-xs text-gray-500 truncate">
+            <p className="text-xs text-mint-500 truncate">
               {pendentes.length > 0 ? pendentes[0].title : "Todas concluídas!"}
             </p>
           </div>
@@ -290,9 +290,9 @@ export default function PlanoPage() {
 
         {/* Alertas */}
         {tarefasAtrasadas.length > 0 && (
-          <div className="mb-8 rounded-xl bg-red-50 border border-red-200 p-4">
+          <div className="mb-8 rounded-2xl bg-red-50 border border-red-200 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
+              <AlertTriangle className="h-5 w-5 text-mint-error" />
               <h3 className="font-semibold text-red-800">
                 ⚠️ Tarefas Atrasadas ({tarefasAtrasadas.length})
               </h3>
@@ -301,7 +301,7 @@ export default function PlanoPage() {
               {tarefasAtrasadas.map((t) => (
                 <div key={t.id} className="flex items-center justify-between text-sm text-red-700 bg-white rounded-lg p-3">
                   <span>{t.title}</span>
-                  <span className="text-red-500 font-medium">
+                  <span className="text-mint-error font-medium">
                     Venceu em {new Date(t.due_date).toLocaleDateString("pt-BR")}
                   </span>
                 </div>
@@ -312,9 +312,9 @@ export default function PlanoPage() {
 
         {/* Tarefas Urgentes (próximos 3 dias) */}
         {tarefasUrgentes.filter((t) => !tarefasAtrasadas.find((a) => a.id === t.id)).length > 0 && (
-          <div className="mb-8 rounded-xl bg-yellow-50 border border-yellow-200 p-4">
+          <div className="mb-8 rounded-2xl bg-yellow-50 border border-yellow-200 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="h-5 w-5 text-yellow-600" />
+              <Clock className="h-5 w-5 text-mint-amber" />
               <h3 className="font-semibold text-yellow-800">
                 ⏰ Vencem em breve
               </h3>
@@ -325,7 +325,7 @@ export default function PlanoPage() {
                 .map((t) => (
                   <div key={t.id} className="flex items-center justify-between text-sm text-yellow-700 bg-white rounded-lg p-3">
                     <span>{t.title}</span>
-                    <span className="text-yellow-600 font-medium">
+                    <span className="text-mint-amber font-medium">
                       {new Date(t.due_date).toLocaleDateString("pt-BR")}
                     </span>
                   </div>
@@ -335,12 +335,12 @@ export default function PlanoPage() {
         )}
 
         {/* Lista de Tarefas */}
-        <div className="rounded-xl bg-white shadow-sm">
+        <div className="rounded-2xl bg-white shadow-sm">
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-lg font-semibold text-gray-900">
               Todas as Tarefas
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-mint-500 mt-1">
               Clique no círculo para marcar como concluída
             </p>
           </div>
@@ -358,7 +358,7 @@ export default function PlanoPage() {
                 return (
                   <div
                     key={plan.id}
-                    className={`p-4 hover:bg-gray-50 transition-colors ${
+                    className={`p-4 hover:bg-mint-50 transition-colors ${
                       plan.status === "concluido" ? "bg-gray-50/50" : ""
                     }`}
                   >
@@ -382,7 +382,7 @@ export default function PlanoPage() {
                           <h3
                             className={`font-medium ${
                               plan.status === "concluido"
-                                ? "text-gray-500 line-through"
+                                ? "text-mint-500 line-through"
                                 : "text-gray-900"
                             }`}
                           >
@@ -405,16 +405,16 @@ export default function PlanoPage() {
                           </span>
                         </div>
 
-                        <p className="text-sm text-gray-600 mt-1">{plan.description}</p>
+                        <p className="text-sm text-mint-600 mt-1">{plan.description}</p>
 
                         {plan.notes && (
-                          <p className="text-xs text-gray-400 mt-1">💡 {plan.notes}</p>
+                          <p className="text-xs text-mint-400 mt-1">💡 {plan.notes}</p>
                         )}
 
                         <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                           <span className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
-                            <span className={isOverdue ? "text-red-500 font-medium" : isDueSoon ? "text-yellow-600 font-medium" : ""}>
+                            <span className={isOverdue ? "text-mint-error font-medium" : isDueSoon ? "text-mint-amber font-medium" : ""}>
                               {isOverdue ? "⚠️ Atrasado: " : isDueSoon ? "⏰ " : ""}
                               {new Date(plan.due_date).toLocaleDateString("pt-BR")}
                             </span>
@@ -436,8 +436,8 @@ export default function PlanoPage() {
 
         {/* Score Timeline */}
         {scores.length > 0 && (
-          <div className="mt-8 rounded-xl bg-white shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="mt-8 rounded-2xl bg-white shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-mint-900 mb-4">
               Evolução do Score
             </h2>
             <div className="space-y-3">
@@ -447,7 +447,7 @@ export default function PlanoPage() {
                     {new Date(s.date).toLocaleDateString("pt-BR")}
                   </div>
                   <div className="flex-1">
-                    <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div className="w-full bg-mint-200 rounded-full h-3">
                       <div
                         className={`h-3 rounded-full ${
                           s.score < 500
@@ -472,23 +472,23 @@ export default function PlanoPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <Link
             href="/dashboard"
-            className="rounded-xl bg-white p-6 shadow-sm hover:shadow-md transition-shadow text-center"
+            className="rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition-shadow text-center"
           >
-            <TrendingUp className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+            <TrendingUp className="h-8 w-8 text-mint-brand mx-auto mb-2" />
             <h3 className="font-medium text-gray-900">Dashboard</h3>
             <p className="text-sm text-gray-500">Ver finanças</p>
           </Link>
 
           <Link
             href="/transactions"
-            className="rounded-xl bg-white p-6 shadow-sm hover:shadow-md transition-shadow text-center"
+            className="rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition-shadow text-center"
           >
-            <Zap className="h-8 w-8 text-green-600 mx-auto mb-2" />
+            <Zap className="h-8 w-8 text-mint-brand-deep mx-auto mb-2" />
             <h3 className="font-medium text-gray-900">Transações</h3>
             <p className="text-sm text-gray-500">Lançar gastos</p>
           </Link>
 
-          <div className="rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-center text-white">
+          <div className="rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-center text-white">
             <Target className="h-8 w-8 mx-auto mb-2" />
             <h3 className="font-medium">Score Meta</h3>
             <p className="text-sm text-blue-100">

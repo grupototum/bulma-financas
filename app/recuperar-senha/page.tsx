@@ -32,39 +32,39 @@ export default function RecuperarSenhaPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-mint-50 dark:bg-mint-900 px-4">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Recuperar senha</h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <h1 className="text-3xl font-bold text-mint-900 dark:text-mint-50">Recuperar senha</h1>
+          <p className="mt-2 text-mint-600 dark:text-mint-400">
             Digite seu email para receber o link de redefinição
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-mint-700 dark:text-mint-300">
               Email
             </label>
             <div className="relative mt-1">
-              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mint-400 dark:text-mint-500" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none"
+                className="w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 py-2 pl-10 pr-4 focus:border-mint-brand focus:outline-none"
                 required
               />
             </div>
           </div>
 
           {message && (
-            <div className="rounded-lg bg-green-100 dark:bg-green-900/30 p-3 text-sm text-green-800 dark:text-green-300">
+            <div className="rounded-lg bg-mint-brand-light dark:bg-mint-brand-deep/30 p-3 text-sm text-green-800 dark:text-green-300">
               {message}
             </div>
           )}
           {error && (
-            <div className="rounded-lg bg-red-100 dark:bg-red-900/30 p-3 text-sm text-red-800 dark:text-red-300">
+            <div className="rounded-lg bg-mint-error-light dark:bg-mint-error/30 p-3 text-sm text-red-800 dark:text-red-300">
               {error}
             </div>
           )}
@@ -72,7 +72,7 @@ export default function RecuperarSenhaPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="w-full rounded-full bg-mint-900 px-4 py-2 font-medium text-white hover:bg-mint-800 disabled:opacity-50"
           >
             {loading ? "Enviando..." : "Enviar link"}
           </button>
@@ -81,7 +81,7 @@ export default function RecuperarSenhaPage() {
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline"
+            className="inline-flex items-center gap-2 text-sm text-mint-brand hover:underline"
           >
             <ArrowLeft className="h-4 w-4" />
             Voltar para o login
