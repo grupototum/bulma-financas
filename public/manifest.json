@@ -1,6 +1,6 @@
 {
-  "name": "Bulma Finanças",
-  "short_name": "BulmaFin",
+  "name": "Cashflow",
+  "short_name": "Cashflow",
   "description": "Sistema financeiro pessoal do Rael",
   "start_url": "/",
   "display": "standalone",

@@ -75,9 +75,18 @@ export default function FixedExpensesPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState(() => {
+  const [startDate, setStartDate] = useState(() => {
     const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}-01`;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const endDay = String(new Date(year, now.getMonth() + 1, 0).getDate()).padStart(2, "0");
+    return `${year}-${month}-${endDay}`;
   });
   const router = useRouter();
 
@@ -115,18 +124,19 @@ export default function FixedExpensesPage() {
   }, [router]);
 
   const monthlyData = useMemo<MonthlyData[]>(() => {
-    const [cy, cm] = period.split("-").map(Number);
+    const cy = parseInt(startDate.split("-")[0], 10);
+    const cm = parseInt(startDate.split("-")[1], 10);
     const data: MonthlyData[] = [];
     for (let i = 5; i >= 0; i--) {
       const d = new Date(cy, cm - 1 - i, 1);
       const y = d.getFullYear();
       const m = d.getMonth() + 1;
       const label = `${String(m).padStart(2, "0")}/${y}`;
-      const start = `${y}-${String(m).padStart(2, "0")}-01`;
-      const endDate = new Date(y, m, 0);
-      const end = `${y}-${String(m).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
+      const monthStart = `${y}-${String(m).padStart(2, "0")}-01`;
+      const monthEndDate = new Date(y, m, 0);
+      const monthEnd = `${y}-${String(m).padStart(2, "0")}-${String(monthEndDate.getDate()).padStart(2, "0")}`;
 
-      const monthTxs = transactions.filter((t) => t.date >= start && t.date <= end);
+      const monthTxs = transactions.filter((t) => t.date >= monthStart && t.date <= monthEnd);
       const income = monthTxs.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0);
       const fixed = monthTxs.filter((t) => t.type === "expense" && t.is_fixed).reduce((s, t) => s + t.amount, 0);
       const variable = monthTxs.filter((t) => t.type === "expense" && !t.is_fixed).reduce((s, t) => s + t.amount, 0);
@@ -134,19 +144,15 @@ export default function FixedExpensesPage() {
       data.push({ label, fixed, variable, income });
     }
     return data;
-  }, [transactions, period]);
+  }, [transactions, startDate, endDate]);
 
   const currentMonthData = useMemo(() => {
-    const [cy, cm] = period.split("-").map(Number);
-    const start = `${cy}-${String(cm).padStart(2, "0")}-01`;
-    const endDate = new Date(cy, cm, 0);
-    const end = `${cy}-${String(cm).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
-    const monthTxs = transactions.filter((t) => t.date >= start && t.date <= end);
+    const monthTxs = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
     const income = monthTxs.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0);
     const fixed = monthTxs.filter((t) => t.type === "expense" && t.is_fixed).reduce((s, t) => s + t.amount, 0);
     const variable = monthTxs.filter((t) => t.type === "expense" && !t.is_fixed).reduce((s, t) => s + t.amount, 0);
     return { income, fixed, variable };
-  }, [transactions, period]);
+  }, [transactions, startDate, endDate]);
 
   const insights = useMemo(() => {
     const { income, fixed, variable } = currentMonthData;
@@ -273,9 +279,16 @@ export default function FixedExpensesPage() {
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-mint-500 dark:text-mint-400" />
               <input
-                type="month"
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="rounded-full border border-mint-200 dark:border-mint-700 dark:bg-mint-925 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
+              />
+              <span className="text-sm text-mint-500 dark:text-mint-400">até</span>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
                 className="rounded-full border border-mint-200 dark:border-mint-700 dark:bg-mint-925 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
               />
             </div>

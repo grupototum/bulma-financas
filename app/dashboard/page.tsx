@@ -91,9 +91,14 @@ export default function DashboardPage() {
   const [budgetSummary, setBudgetSummary] = useState<BudgetSummary>({ planned: 0, spent: 0 });
   const [loading, setLoading] = useState(true);
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
-  const [period, setPeriod] = useState(() => {
+  const [startDate, setStartDate] = useState(() => {
     const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, "0")}-${String(end.getDate()).padStart(2, "0")}`;
   });
   const router = useRouter();
 
@@ -146,12 +151,7 @@ export default function DashboardPage() {
     async function calculate() {
       if (transactions.length === 0) return;
 
-      const [year, month] = period.split("-").map(Number);
-      const startOfMonth = `${year}-${String(month).padStart(2, "0")}-01`;
-      const endOfMonthDate = new Date(year, month, 0);
-      const endOfMonth = `${year}-${String(month).padStart(2, "0")}-${String(endOfMonthDate.getDate()).padStart(2, "0")}`;
-
-      const monthTxs = transactions.filter((t) => t.date >= startOfMonth && t.date <= endOfMonth);
+      const monthTxs = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
 
       const income = monthTxs.filter((t) => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
       const expense = monthTxs.filter((t) => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
@@ -170,6 +170,8 @@ export default function DashboardPage() {
       );
 
       const supabase = createClient();
+      const month = parseInt(startDate.split("-")[1], 10);
+      const year = parseInt(startDate.split("-")[0], 10);
       const { data: budget } = await supabase
         .from("budgets")
         .select("id")
@@ -236,22 +238,18 @@ export default function DashboardPage() {
     }
 
     calculate();
-  }, [transactions, period, user]);
+  }, [transactions, startDate, endDate, user]);
 
   const recentTransactions = useMemo(() => {
     return transactions.slice(0, 5);
   }, [transactions]);
 
   const fixedVariableSummary = useMemo(() => {
-    const [year, month] = period.split("-").map(Number);
-    const startOfMonth = `${year}-${String(month).padStart(2, "0")}-01`;
-    const endOfMonthDate = new Date(year, month, 0);
-    const endOfMonth = `${year}-${String(month).padStart(2, "0")}-${String(endOfMonthDate.getDate()).padStart(2, "0")}`;
-    const monthTxs = transactions.filter((t) => t.date >= startOfMonth && t.date <= endOfMonth);
+    const monthTxs = transactions.filter((t) => t.date >= startDate && t.date <= endDate);
     const fixed = monthTxs.filter((t) => t.type === "expense" && t.is_fixed).reduce((s, t) => s + t.amount, 0);
     const variable = monthTxs.filter((t) => t.type === "expense" && !t.is_fixed).reduce((s, t) => s + t.amount, 0);
     return { fixed, variable };
-  }, [transactions, period]);
+  }, [transactions, startDate, endDate]);
 
   if (loading) {
     return (
@@ -269,9 +267,16 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-mint-500 dark:text-mint-400" />
             <input
-              type="month"
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm"
+            />
+            <span className="text-sm text-mint-500 dark:text-mint-400">até</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm"
             />
           </div>

@@ -50,9 +50,18 @@ export default function RelatoriosPage() {
   const [user, setUser] = useState<any>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState(() => {
+  const [startDate, setStartDate] = useState(() => {
     const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}-01`;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const endDay = String(new Date(year, now.getMonth() + 1, 0).getDate()).padStart(2, "0");
+    return `${year}-${month}-${endDay}`;
   });
   const [activeTab, setActiveTab] = useState<Tab>("categorias");
   const [comparePeriod, setComparePeriod] = useState(() => {
@@ -82,12 +91,8 @@ export default function RelatoriosPage() {
   }, [router]);
 
   const filteredTransactions = useMemo(() => {
-    const [year, month] = period.split("-").map(Number);
-    const start = `${year}-${String(month).padStart(2, "0")}-01`;
-    const endDate = new Date(year, month, 0);
-    const end = `${year}-${String(month).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
-    return transactions.filter((t) => t.date >= start && t.date <= end);
-  }, [transactions, period]);
+    return transactions.filter((t) => t.date >= startDate && t.date <= endDate);
+  }, [transactions, startDate, endDate]);
 
   const categoryReport = useMemo<CategoryReport[]>(() => {
     const map = new Map<string, CategoryReport>();
@@ -165,7 +170,8 @@ export default function RelatoriosPage() {
   }
 
   const cashFlowData = useMemo<CashFlowData[]>(() => {
-    const [cy, cm] = period.split("-").map(Number);
+    const cy = parseInt(startDate.split("-")[0], 10);
+    const cm = parseInt(startDate.split("-")[1], 10);
     const data: CashFlowData[] = [];
     let cumulative = 0;
 
@@ -188,7 +194,7 @@ export default function RelatoriosPage() {
     }
 
     return data;
-  }, [transactions, period]);
+  }, [transactions, startDate, endDate]);
 
   function exportCSV() {
     const headers = ["Data", "Descrição", "Tipo", "Categoria", "Conta", "Valor"];
@@ -205,7 +211,7 @@ export default function RelatoriosPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `relatorio-${period}.csv`;
+    link.download = `relatorio-${startDate}-a-${endDate}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -215,12 +221,13 @@ export default function RelatoriosPage() {
 
   function exportPDF() {
     const doc = new jsPDF();
-    const [year, month] = period.split("-").map(Number);
+    const year = parseInt(startDate.split("-")[0], 10);
+    const month = parseInt(startDate.split("-")[1], 10);
     const monthLabel = `${String(month).padStart(2, "0")}/${year}`;
 
     // Título
     doc.setFontSize(18);
-    doc.text("Relatório Bulma Finanças", 14, 20);
+    doc.text("Relatório Cashflow", 14, 20);
     doc.setFontSize(12);
     doc.text(`Período: ${monthLabel}`, 14, 28);
 
@@ -281,7 +288,7 @@ export default function RelatoriosPage() {
       });
     }
 
-    doc.save(`relatorio-${period}.pdf`);
+    doc.save(`relatorio-${startDate}-a-${endDate}.pdf`);
     toast.success("PDF exportado!");
   }
 
@@ -303,9 +310,16 @@ export default function RelatoriosPage() {
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-mint-500 dark:text-mint-400" />
               <input
-                type="month"
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
+              />
+              <span className="text-sm text-mint-500 dark:text-mint-400">até</span>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
                 className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
               />
             </div>
@@ -464,7 +478,7 @@ export default function RelatoriosPage() {
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-lg font-bold text-mint-brand-deep">{formatCurrency(totalIncome)}</p>
-                    <p className="text-xs text-gray-400">{period}</p>
+                    <p className="text-xs text-gray-400">{startDate.slice(0, 7)}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-mint-700 dark:text-mint-300">{formatCurrency(compareTotalIncome)}</p>
@@ -480,7 +494,7 @@ export default function RelatoriosPage() {
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-lg font-bold text-mint-error">{formatCurrency(totalExpense)}</p>
-                    <p className="text-xs text-gray-400">{period}</p>
+                    <p className="text-xs text-gray-400">{startDate.slice(0, 7)}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-mint-700 dark:text-mint-300">{formatCurrency(compareTotalExpense)}</p>
@@ -496,7 +510,7 @@ export default function RelatoriosPage() {
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-lg font-bold text-mint-brand">{formatCurrency(totalIncome - totalExpense)}</p>
-                    <p className="text-xs text-gray-400">{period}</p>
+                    <p className="text-xs text-gray-400">{startDate.slice(0, 7)}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-mint-700 dark:text-mint-300">{formatCurrency(compareTotalIncome - compareTotalExpense)}</p>
@@ -514,7 +528,7 @@ export default function RelatoriosPage() {
               <h3 className="mb-4 text-lg font-semibold text-mint-900 dark:text-mint-50">Top categorias</h3>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <p className="mb-2 text-sm font-medium text-mint-500 dark:text-mint-400">{period}</p>
+                  <p className="mb-2 text-sm font-medium text-mint-500 dark:text-mint-400">{startDate.slice(0, 7)}</p>
                   {categoryReport.slice(0, 5).map((cat) => (
                     <div key={cat.name} className="flex items-center justify-between py-2">
                       <div className="flex items-center gap-2">

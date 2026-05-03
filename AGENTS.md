@@ -1,4 +1,4 @@
-# Bulma Finanças — Guia para Agentes de Código
+# Cashflow — Guia para Agentes de Código
 
 > Sistema financeiro pessoal do Rael
 > Stack: Next.js 14 + Supabase + Tailwind CSS + shadcn/ui
@@ -9,7 +9,7 @@
 
 ## Visão Geral do Projeto
 
-**Bulma Finanças v2** é um aplicativo web de controle financeiro pessoal. A v1 era um PWA baseado em localStorage; a v2 migrou para uma arquitetura cliente-servidor com Supabase como backend, permitindo sincronização entre dispositivos, autenticação de usuários e relatórios persistidos em banco de dados.
+**Cashflow v2** é um aplicativo web de controle financeiro pessoal. A v1 era um PWA baseado em localStorage; a v2 migrou para uma arquitetura cliente-servidor com Supabase como backend, permitindo sincronização entre dispositivos, autenticação de usuários e relatórios persistidos em banco de dados.
 
 A arquitetura geral:
 

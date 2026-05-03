@@ -47,9 +47,18 @@ export default function OrcamentosPage() {
   const [budgetCategories, setBudgetCategories] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [period, setPeriod] = useState(() => {
+  const [startDate, setStartDate] = useState(() => {
     const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}-01`;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const endDay = String(new Date(year, now.getMonth() + 1, 0).getDate()).padStart(2, "0");
+    return `${year}-${month}-${endDay}`;
   });
   const router = useRouter();
 
@@ -81,7 +90,8 @@ export default function OrcamentosPage() {
   // Carregar orçamento do período selecionado
   useEffect(() => {
     if (!user) return;
-    const [year, month] = period.split("-").map(Number);
+    const year = parseInt(startDate.split("-")[0], 10);
+    const month = parseInt(startDate.split("-")[1], 10);
 
     const supabase = createClient();
     async function loadBudget() {
@@ -118,30 +128,26 @@ export default function OrcamentosPage() {
       }
     }
     loadBudget();
-  }, [user, period]);
+  }, [user, startDate, endDate]);
 
   const spentByCategory = useMemo(() => {
-    const [year, month] = period.split("-").map(Number);
-    const start = `${year}-${String(month).padStart(2, "0")}-01`;
-    const endDate = new Date(year, month, 0);
-    const end = `${year}-${String(month).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
-
     const map: Record<string, number> = {};
     transactions
-      .filter((t) => t.type === "expense" && t.date >= start && t.date <= end)
+      .filter((t) => t.type === "expense" && t.date >= startDate && t.date <= endDate)
       .forEach((t) => {
         if (t.category_id) {
           map[t.category_id] = (map[t.category_id] || 0) + t.amount;
         }
       });
     return map;
-  }, [transactions, period]);
+  }, [transactions, startDate, endDate]);
 
   async function handleSave() {
     if (!user) return;
     setSaving(true);
     const supabase = createClient();
-    const [year, month] = period.split("-").map(Number);
+    const year = parseInt(startDate.split("-")[0], 10);
+    const month = parseInt(startDate.split("-")[1], 10);
 
     let budgetId: string;
 
@@ -237,9 +243,16 @@ export default function OrcamentosPage() {
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-mint-500 dark:text-mint-400" />
             <input
-              type="month"
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
+            />
+            <span className="text-sm text-mint-500 dark:text-mint-400">até</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
             />
           </div>
