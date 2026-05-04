@@ -7,13 +7,13 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bulma Finanças",
+  title: "Cashflow",
   description: "Sistema financeiro pessoal do Rael",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Bulma Finanças",
+    title: "Cashflow",
   },
 };
 
@@ -35,9 +35,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Bulma Finanças" />
+        <meta name="apple-mobile-web-app-title" content="Cashflow" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="application-name" content="Bulma Finanças" />
+        <meta name="application-name" content="Cashflow" />
       </head>
       <body className={inter.className}>
         <ThemeProvider>

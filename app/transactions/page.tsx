@@ -32,6 +32,7 @@ interface Transaction {
   date: string;
   category_id: string | null;
   account_id: string | null;
+  is_fixed: boolean;
   is_recurring: boolean;
   recurring_interval: string | null;
   category?: { name: string; color: string } | null;
@@ -79,7 +80,19 @@ export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterType, setFilterType] = useState<"" | "expense" | "income">("");
-  const [filterMonth, setFilterMonth] = useState("");
+  const [startDate, setStartDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}-01`;
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const endDay = String(new Date(year, now.getMonth() + 1, 0).getDate()).padStart(2, "0");
+    return `${year}-${month}-${endDay}`;
+  });
   const [showFilters, setShowFilters] = useState(false);
 
   // Sorting
@@ -197,11 +210,15 @@ export default function TransactionsPage() {
     const supabase = createClient();
 
     let finalCategoryId = categoryId;
+    let finalIsFixed = false;
     if (!finalCategoryId && categories.length > 0 && !editingId) {
       const categoryMap = new Map<string, string>();
       categories.forEach((c) => categoryMap.set(c.name, c.id));
       const autoResult = autoCategorize(description, categoryMap);
-      if (autoResult) finalCategoryId = autoResult.categoryId;
+      if (autoResult) {
+        finalCategoryId = autoResult.categoryId;
+        finalIsFixed = autoResult.isFixed;
+      }
     }
 
     const payload = {
@@ -212,6 +229,7 @@ export default function TransactionsPage() {
       category_id: finalCategoryId || null,
       account_id: accountId || null,
       date,
+      is_fixed: finalIsFixed,
       is_recurring: isRecurring,
       recurring_interval: isRecurring ? recurringInterval : null,
     };
@@ -335,6 +353,11 @@ export default function TransactionsPage() {
         typeVal = "income";
       }
 
+      // Auto-categorizar importação
+      const categoryMap = new Map<string, string>();
+      categories.forEach((c) => categoryMap.set(c.name, c.id));
+      const autoResult = autoCategorize(descVal, categoryMap);
+
       toInsert.push({
         user_id: user.id,
         description: descVal,
@@ -342,6 +365,8 @@ export default function TransactionsPage() {
         type: typeVal,
         date: dateVal,
         account_id: importAccountId || null,
+        category_id: autoResult?.categoryId || null,
+        is_fixed: autoResult?.isFixed || false,
       });
     }
 
@@ -378,6 +403,7 @@ export default function TransactionsPage() {
       category_id: tx.category_id,
       account_id: tx.account_id,
       date: nextDate,
+      is_fixed: tx.is_fixed || false,
       is_recurring: false,
       recurring_interval: null,
     });
@@ -419,8 +445,8 @@ export default function TransactionsPage() {
     if (filterType) {
       list = list.filter((t) => t.type === filterType);
     }
-    if (filterMonth) {
-      list = list.filter((t) => t.date.startsWith(filterMonth));
+    if (startDate && endDate) {
+      list = list.filter((t) => t.date >= startDate && t.date <= endDate);
     }
 
     list.sort((a, b) => {
@@ -432,7 +458,7 @@ export default function TransactionsPage() {
     });
 
     return list;
-  }, [transactions, searchQuery, filterCategory, filterType, filterMonth, sortBy, sortOrder]);
+  }, [transactions, searchQuery, filterCategory, filterType, startDate, endDate, sortBy, sortOrder]);
 
   function toggleSort(field: SortBy) {
     if (sortBy === field) {
@@ -755,18 +781,27 @@ export default function TransactionsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Mês</label>
-                  <input
-                    type="month"
-                    value={filterMonth}
-                    onChange={(e) => setFilterMonth(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
-                  />
+                  <label className="block text-xs font-medium text-mint-500 dark:text-mint-400">Período</label>
+                  <div className="mt-1 flex items-center gap-2">
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
+                    />
+                    <span className="text-xs text-mint-500 dark:text-mint-400">até</span>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="w-full rounded-lg border border-mint-300 dark:border-mint-600 dark:bg-mint-800 dark:text-mint-100 px-3 py-2 text-sm focus:border-mint-brand focus:outline-none"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="mt-3 flex gap-2">
                 <button
-                  onClick={() => { setFilterCategory(""); setFilterType(""); setFilterMonth(""); setSearchQuery(""); }}
+                  onClick={() => { setFilterCategory(""); setFilterType(""); setStartDate(""); setEndDate(""); setSearchQuery(""); }}
                   className="flex items-center gap-1 rounded-lg border border-mint-300 dark:border-mint-600 px-3 py-1.5 text-xs text-mint-600 dark:text-mint-400 hover:bg-mint-50 dark:hover:bg-mint-800 dark:bg-mint-950"
                 >
                   <X className="h-3 w-3" /> Limpar filtros

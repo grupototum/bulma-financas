@@ -17,6 +17,7 @@ import {
   X,
   Sun,
   Moon,
+  Repeat,
 } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "@/lib/theme-provider";
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/transactions", label: "Transações", icon: ArrowLeftRight },
   { href: "/categories", label: "Categorias", icon: Tags },
   { href: "/contas", label: "Contas", icon: Landmark },
+  { href: "/fixed-expenses", label: "Fixos vs Variáveis", icon: Repeat },
   { href: "/metas", label: "Metas", icon: Target },
   { href: "/orcamentos", label: "Orçamentos", icon: Wallet },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
@@ -61,7 +63,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
       <aside className="hidden w-64 flex-col border-r border-mint-200 dark:border-mint-700 bg-white dark:bg-mint-900 md:flex">
         <div className="flex h-16 items-center border-b border-mint-200 dark:border-mint-700 px-6">
           <Link href="/dashboard" className="text-lg font-bold text-mint-900 dark:text-mint-50">
-            Bulma Finanças
+            Cashflow
           </Link>
         </div>
         <nav className="flex-1 space-y-1 px-3 py-4">
@@ -100,7 +102,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
       <div className="flex flex-1 flex-col">
         <header className="flex h-16 items-center justify-between border-b border-mint-200 dark:border-mint-700 bg-white dark:bg-mint-800 px-4 md:hidden">
           <Link href="/dashboard" className="text-lg font-bold text-mint-900 dark:text-mint-50">
-            Bulma Finanças
+            Cashflow
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -180,7 +182,7 @@ export function ProtectedLayout({ children, userEmail }: ProtectedLayoutProps) {
 
         {/* Footer */}
         <footer className="border-t border-mint-200 dark:border-mint-700 bg-white dark:bg-mint-800 py-4 text-center text-xs text-mint-400 dark:text-mint-500">
-          Bulma Finanças v2 • Desenvolvido por Rael
+          Cashflow v2 • Desenvolvido por Rael
         </footer>
       </div>
     </div>

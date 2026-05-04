@@ -71,7 +71,7 @@ export function LoginForm() {
         <h1 className="text-3xl font-bold text-mint-900 dark:text-mint-50">
           {isSignUp ? "Criar conta" : "Entrar"}
         </h1>
-        <p className="mt-2 text-mint-600 dark:text-mint-400">Bulma Finanças</p>
+        <p className="mt-2 text-mint-600 dark:text-mint-400">Cashflow</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">

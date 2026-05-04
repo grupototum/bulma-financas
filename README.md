@@ -1,4 +1,4 @@
-# 🦊 Bulma Finanças
+# 🦊 Cashflow
 
 > Sistema financeiro pessoal do Israel (Rael). Organiza receitas, despesas, cartões, metas e plano de ação de dívidas — tudo em um dashboard limpo e responsivo.
 

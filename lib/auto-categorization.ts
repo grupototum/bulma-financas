@@ -5,6 +5,7 @@ export interface AutoCategorizationRule {
   keyword: string;
   matchType: 'contains' | 'exact' | 'starts_with' | 'ends_with';
   categoryName: string;
+  isFixed?: boolean;
 }
 
 // Regras treinadas com base nos dados reais do Rael
@@ -25,32 +26,32 @@ export const defaultRules: AutoCategorizationRule[] = [
   { keyword: 'MERCADO', matchType: 'contains', categoryName: '🍔 Alimentação' },
   { keyword: 'SUPERMERCADO', matchType: 'contains', categoryName: '🍔 Alimentação' },
   
-  // 📱 Assinaturas / Streaming / Apps
-  { keyword: 'PICPAY MAIS', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'ASSINATURA', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'NETFLIX', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'SPOTIFY', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'YOUTUBE', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'GOOGLE PLAY', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'GOOGLE ONE', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'APPLE', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'AMAZON PRIME', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'DISNEY', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'HBO', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'PARAMOUNT', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'GLOBOPLAY', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'CANVA', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'ADOBE', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'NOTION', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'N8N', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'MAKE', matchType: 'contains', categoryName: '📱 Assinaturas' },
-  { keyword: 'ZAPIER', matchType: 'contains', categoryName: '📱 Assinaturas' },
+  // 📱 Assinaturas / Streaming / Apps (FIXO)
+  { keyword: 'PICPAY MAIS', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'ASSINATURA', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'NETFLIX', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'SPOTIFY', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'YOUTUBE', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'GOOGLE PLAY', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'GOOGLE ONE', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'APPLE', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'AMAZON PRIME', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'DISNEY', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'HBO', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'PARAMOUNT', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'GLOBOPLAY', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'CANVA', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'ADOBE', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'NOTION', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'N8N', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'MAKE', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
+  { keyword: 'ZAPIER', matchType: 'contains', categoryName: '📱 Assinaturas', isFixed: true },
   
-  // 💳 Cartão de Crédito
-  { keyword: 'FATURA CARTAO', matchType: 'contains', categoryName: '💳 Cartão de Crédito' },
-  { keyword: 'FATURA PICPAY', matchType: 'contains', categoryName: '💳 Cartão de Crédito' },
-  { keyword: 'PAG DEBITO', matchType: 'contains', categoryName: '💳 Cartão de Crédito' },
-  { keyword: 'PAG CARTAO', matchType: 'contains', categoryName: '💳 Cartão de Crédito' },
+  // 💳 Cartão de Crédito (FIXO)
+  { keyword: 'FATURA CARTAO', matchType: 'contains', categoryName: '💳 Cartão de Crédito', isFixed: true },
+  { keyword: 'FATURA PICPAY', matchType: 'contains', categoryName: '💳 Cartão de Crédito', isFixed: true },
+  { keyword: 'PAG DEBITO', matchType: 'contains', categoryName: '💳 Cartão de Crédito', isFixed: true },
+  { keyword: 'PAG CARTAO', matchType: 'contains', categoryName: '💳 Cartão de Crédito', isFixed: true },
   
   // 🔄 Transferências
   { keyword: 'PIX TRANSFERENCIA', matchType: 'contains', categoryName: '🔄 Transferências' },
@@ -61,14 +62,14 @@ export const defaultRules: AutoCategorizationRule[] = [
   { keyword: 'COFRINHO', matchType: 'contains', categoryName: '❓ Outros' },
   { keyword: 'GUARDADO', matchType: 'contains', categoryName: '❓ Outros' },
   
-  // 💰 Receitas
-  { keyword: 'CRED PIX', matchType: 'contains', categoryName: '💰 Receitas' },
-  { keyword: 'RECEBIMENTO', matchType: 'contains', categoryName: '💰 Receitas' },
-  { keyword: 'RENDIMENTO', matchType: 'contains', categoryName: '💵 Rendimentos' },
-  { keyword: 'SALARIO', matchType: 'contains', categoryName: '💰 Receitas' },
-  { keyword: 'PROLABORE', matchType: 'contains', categoryName: '💰 Receitas' },
-  { keyword: 'DIVIDENDO', matchType: 'contains', categoryName: '💵 Rendimentos' },
-  { keyword: 'JUROS', matchType: 'contains', categoryName: '💵 Rendimentos' },
+  // 💰 Receitas (FIXO — receitas regulares)
+  { keyword: 'CRED PIX', matchType: 'contains', categoryName: '💰 Receitas', isFixed: true },
+  { keyword: 'RECEBIMENTO', matchType: 'contains', categoryName: '💰 Receitas', isFixed: true },
+  { keyword: 'RENDIMENTO', matchType: 'contains', categoryName: '💵 Rendimentos', isFixed: true },
+  { keyword: 'SALARIO', matchType: 'contains', categoryName: '💰 Receitas', isFixed: true },
+  { keyword: 'PROLABORE', matchType: 'contains', categoryName: '💰 Receitas', isFixed: true },
+  { keyword: 'DIVIDENDO', matchType: 'contains', categoryName: '💵 Rendimentos', isFixed: true },
+  { keyword: 'JUROS', matchType: 'contains', categoryName: '💵 Rendimentos', isFixed: true },
   
   // 📢 Marketing
   { keyword: 'MARKETING', matchType: 'contains', categoryName: '📢 Marketing' },
@@ -80,22 +81,22 @@ export const defaultRules: AutoCategorizationRule[] = [
   { keyword: 'TRAFEGO', matchType: 'contains', categoryName: '📢 Marketing' },
   { keyword: 'CAMPAIGN', matchType: 'contains', categoryName: '📢 Marketing' },
   
-  // 📄 Boletos/Contas
-  { keyword: 'BOLETO', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'COBRANCA', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'CONTA DE LUZ', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'CEMIG', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'COPASA', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'INTERNET', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'TELEFONE', matchType: 'contains', categoryName: '📄 Boletos/Contas' },
-  { keyword: 'ALUGUEL', matchType: 'contains', categoryName: '🏠 Moradia' },
-  { keyword: 'CONDOMINIO', matchType: 'contains', categoryName: '🏠 Moradia' },
-  { keyword: 'IPTU', matchType: 'contains', categoryName: '🏠 Moradia' },
+  // 📄 Boletos/Contas (FIXO)
+  { keyword: 'BOLETO', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'COBRANCA', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'CONTA DE LUZ', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'CEMIG', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'COPASA', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'INTERNET', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'TELEFONE', matchType: 'contains', categoryName: '📄 Boletos/Contas', isFixed: true },
+  { keyword: 'ALUGUEL', matchType: 'contains', categoryName: '🏠 Moradia', isFixed: true },
+  { keyword: 'CONDOMINIO', matchType: 'contains', categoryName: '🏠 Moradia', isFixed: true },
+  { keyword: 'IPTU', matchType: 'contains', categoryName: '🏠 Moradia', isFixed: true },
   
   // 🚗 Transporte
-  { keyword: 'IPVA', matchType: 'contains', categoryName: '🚗 Transporte' },
-  { keyword: 'DPVAT', matchType: 'contains', categoryName: '🚗 Transporte' },
-  { keyword: 'SEGURO VEICULO', matchType: 'contains', categoryName: '🚗 Transporte' },
+  { keyword: 'IPVA', matchType: 'contains', categoryName: '🚗 Transporte', isFixed: true },
+  { keyword: 'DPVAT', matchType: 'contains', categoryName: '🚗 Transporte', isFixed: true },
+  { keyword: 'SEGURO VEICULO', matchType: 'contains', categoryName: '🚗 Transporte', isFixed: true },
   { keyword: 'POSTO', matchType: 'contains', categoryName: '🚗 Transporte' },
   { keyword: 'COMBUSTIVEL', matchType: 'contains', categoryName: '🚗 Transporte' },
   { keyword: 'GASOLINA', matchType: 'contains', categoryName: '🚗 Transporte' },
@@ -125,13 +126,13 @@ export const defaultRules: AutoCategorizationRule[] = [
 export function autoCategorize(
   description: string,
   categoryMap: Map<string, string> // nome da categoria -> category_id
-): { categoryId: string; categoryName: string } | null {
+): { categoryId: string; categoryName: string; isFixed: boolean } | null {
   const upperDesc = description.toUpperCase();
-  
+
   for (const rule of defaultRules) {
     let matches = false;
     const upperKeyword = rule.keyword.toUpperCase();
-    
+
     switch (rule.matchType) {
       case 'contains':
         matches = upperDesc.includes(upperKeyword);
@@ -146,12 +147,12 @@ export function autoCategorize(
         matches = upperDesc.endsWith(upperKeyword);
         break;
     }
-    
+
     if (matches) {
       const categoryId = categoryMap.get(rule.categoryName);
-      if (categoryId) return { categoryId, categoryName: rule.categoryName };
+      if (categoryId) return { categoryId, categoryName: rule.categoryName, isFixed: rule.isFixed ?? false };
     }
   }
-  
+
   return null;
 }
