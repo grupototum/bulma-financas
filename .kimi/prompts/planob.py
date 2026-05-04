@@ -45,8 +45,9 @@ def load_context():
     return context
 
 def chat_with_groq(messages):
-    if not GROQ_API_KEY:
-        return "❌ Erro: GROQ_API_KEY não definida. Rode: export GROQ_API_KEY=sua_key"
+    key = os.environ.get("GROQ_API_KEY", "")
+    if not key:
+        return "❌ Erro: GROQ_API_KEY não definida. Digite a key primeiro."
     
     data = json.dumps({
         "model": MODEL,
@@ -59,7 +60,7 @@ def chat_with_groq(messages):
         "https://api.groq.com/openai/v1/chat/completions",
         data=data,
         headers={
-            "Authorization": f"Bearer {GROQ_API_KEY}",
+            "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
         }
